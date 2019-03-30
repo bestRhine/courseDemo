@@ -2,26 +2,26 @@
 <!DOCTYPE mapper
     PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.rhine.gym.dao.courseDao">                <!--  很重要-->
-	<select id="findCourseByName" parameterType="java.lang.String"	resultMap="course">           <!-- 使用别名 -->            <!--  type ???很重要-->
-	 	select *from course where cname=#{cname}
+<mapper namespace="com.rhine.gym.dao.CourseDao">                <!--  很重要-->
+	<select id="listCourseByName"	parameterType="java.lang.String"  resultMap="Course">           <!-- 使用别名 -->            <!--  type ???很重要-->
+	 	select *from course where cname=#{cname}  ORDER BY cid  desc limit 0,3
 	</select>
 	
 	<delete id="deleteCourse" parameterType="java.lang.Integer">
         DELETE FROM course WHERE cid = #{cid}
 	</delete>
 	
-	    <update id="updateCourse" parameterType="com.rhine.gym.entity.course">
+	    <update id="updateCourse" parameterType="Course">
         UPDATE course SET tid = #{tid}, cname = #{cname},
         cinfo=#{cinfo},ctype=#{ctype}  WHERE cid = #{cid}
     </update>
     
-	<insert id="addCourse" parameterType="course">
+	<insert id="addCourse" parameterType="Course">
         INSERT INTO  course(tid,cname,cinfo,ctype) VALUES(#{tid}, #{cname}, #{cinfo}, #{ctype})
     </insert>		 	
 	 	
 	  <!-- 查询一条数据 -->
-    <select id="getCourse" parameterType="java.lang.Integer"  resultMap="course" >
+    <select id="getCourse" parameterType="java.lang.Integer"  resultMap="Course" >
         SELECT * FROM course WHERE cid = #{cid}
 	 </select>
 	 
@@ -29,11 +29,11 @@
         SELECT COUNT(*) FROM course
     </select>
     
-	 <select id="list" resultMap="course">
+	 <select id="list" resultMap="Course">
         SELECT * FROM course ORDER BY cid  desc limit #{param1}, #{param2}
 	 </select>
 	 
-	  <resultMap id="course" type="course">
+	  <resultMap id="Course" type="Course">
         <id column="cid" property="cid"/>
         <result column="tid" property="tid"/>
         <result column="cname" property="cname"/>

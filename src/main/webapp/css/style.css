@@ -2,6 +2,11 @@ body {
     padding-top: 60px;
 }
  
+div.findDIV {
+    width: 500px;
+    margin: 0 auto;
+}
+
 div.listDIV {
     width: 600px;
     margin: 0 auto;

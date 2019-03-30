@@ -11,29 +11,66 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.rhine.gym.entity.course;
-import com.rhine.gym.service.courseService;
+import com.rhine.gym.entity.Course;
+import com.rhine.gym.service.CourseService;
 import com.rhine.gym.util.Page;
 
 @Controller
 
-public class courseController{
+public class CourseController{
 	
 	@Autowired
-	private courseService courseService;
+	private CourseService CourseService;
 	
-	@RequestMapping("/findCourse.action")
-	public String findCourse(course cs,Model model) {
-		List<course> cList=courseService.findCourseByName(cs);
-		model.addAttribute("cList",cList);
-		return "test";
-	}
+	@RequestMapping("/findCourse")
+	/*  public String findCourse(HttpServletRequest request, HttpServletResponse response) {
+		 
+		String cname=request.getParameter("cname");
+        // 获取分页参数
+       /* int start = 0;
+        int count = 5;
+       
+        try {
+            start = Integer.parseInt(request.getParameter("page.start"));
+            count = Integer.parseInt(request.getParameter("page.count"));
+        } catch (Exception e) {
+        }  /
+        
+
+        Page page = new Page(0,3);
+ 		 
+		
+        List<course> course = courseService.listCourseByName(cname);
+        int total = courseService.getTotal();
+        page.setTotal(total);
+ 
+        request.setAttribute("course", course);
+        request.setAttribute("page", page);
+ 
+        return "findCourse";  */
+
+		public ModelAndView listCourseByName(ModelAndView mav,String cname) {
+			List<Course> courseList= CourseService.listCourseByName(cname);
+
+   
+
+	        Page page = new Page(0,3);
+
+	        int total = courseList.size(); //取list的size（）得到个数
+	        page.setTotal(total);
+	 
+			mav.addObject("course",courseList);
+			mav.addObject("page",page);
+			mav.setViewName("listCourse");
+			return mav;	
+    }
+
 	
 	
 	  @RequestMapping("/addCourse")
 	public String addCourse(HttpServletRequest request, HttpServletResponse response) {
 		 
-        course cs=new course();
+        Course cs=new Course();
 
         String tid = request.getParameter("tid");
         String cname = request.getParameter("cname");
@@ -45,21 +82,21 @@ public class courseController{
         cs.setCinfo(cinfo);
         cs.setCtype(ctype);
  
-        courseService.addCourse(cs);
+        CourseService.addCourse(cs);
  
         return "redirect:listCourse";
     }
 	  
 	  @RequestMapping("/deleteCourse")
 	    public String deleteCourse(int cid) {
-	        courseService.deleteCourse(cid);
+	        CourseService.deleteCourse(cid);
 	        return "redirect:listCourse";
 	    }
 	 
 	    @RequestMapping("/editCourse")
 	    public ModelAndView editCourse(int cid) {
 	        ModelAndView mav = new ModelAndView("editCourse");
-	        course cs = courseService.getCourse(cid);
+	        Course cs = CourseService.getCourse(cid);
 	        mav.addObject("course", cs);
 	        return mav;
 	    }   
@@ -67,7 +104,7 @@ public class courseController{
 	    @RequestMapping("/updateCourse")
 	    public String updateCourse(HttpServletRequest request, HttpServletResponse response) {
 	 
-	        course cs=new course();
+	        Course cs=new Course();
 	        
 	        int cid=Integer.parseInt(request.getParameter("cid"));
 	        String tid = request.getParameter("tid");
@@ -81,7 +118,7 @@ public class courseController{
 	        cs.setCinfo(cinfo);
 	        cs.setCtype(ctype);
 	        
-	        courseService.updateCourse(cs);
+	        CourseService.updateCourse(cs);
 	        
 	        return "redirect:listCourse";
 	    }
@@ -101,10 +138,10 @@ public class courseController{
 	        }
 	 
 
-	        Page page = new Page(start, count);
+	        Page page = new Page(start, count); 
 	 
-	        List<course> course = courseService.list(page.getStart(), page.getCount());
-	        int total = courseService.getTotal();
+	        List<Course> course = CourseService.list(page.getStart(), page.getCount());
+	        int total = CourseService.getTotal();
 	        page.setTotal(total);
 	 
 	        request.setAttribute("course", course);

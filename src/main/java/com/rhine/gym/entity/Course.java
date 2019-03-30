@@ -1,5 +1,5 @@
 package com.rhine.gym.entity;
-public class course{
+public class Course{
 	 private int    cid;       
 	 private String     tid;        
 	 private String   cname;          

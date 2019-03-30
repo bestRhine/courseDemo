@@ -25,7 +25,7 @@
         </div>
         <div class="panel-body">
  
-            <form method="post" action="/updateCourse" role="form">
+            <form method="post" action="${pageContext.request.contextPath }/updateCourse" role="form">
                 <table class="editTable">
                 	<tr>
                         <td>courseId：</td>
