@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rhine.gym.dao.ContractDao">   
+	<resultMap type="com.rhine.gym.entity.Contract" id="ContractMap" >
+	 <id column="tctid"   property="ctid"/>
+	    <result column="tid"   property="tid"/>
+		<result column="tctteacher"   property="ctteacher"/>
+		<result column="tctsaler"   property="ctsaler"/>
+		<result column="tctbegin"   property="ctbegin"/>
+		<result column="tctend"   property="ctend"/>
+		<result column="tctorder"   property="ctorder"/>
+		<result column="tctpay"   property="ctpay"/>
+		<result column="tctoperator"   property="ctoperator"/>
+		<result column="tcttype"   property="cttype"/>  
+
+	</resultMap>
+					
+	 <sql id="query_contract_where">	
+	 	<if test="params.ctid!=null"> and ct.tctid=#{params.ctid} </if>	
+		<if test="params.ctteacher!=null"> and ct.tctteacher like #{params.ctteacher} </if>		
+		<if test="params.ctbegin!=null">and Date(ct.tctbegin)<![CDATA[>=]]>#{params.ctbegin}</if>
+		<if test="params.ctend!=null">and Date(ct.tctend)<![CDATA[<=]]>#{params.ctend}</if>
+	</sql>
+
+	
+
+	<select id="findBy" parameterType="java.util.HashMap" resultMap="ContractMap">
+		select * from ct
+		where 1=1
+		<include refid="query_contract_where"></include>
+		
+	</select>
+		
+		<!-- 	select    from ct,ct_course,course
+		where
+		course.cid=ct_course.cid 
+		and ct.tctid=ct_course.ctid		
+		and 1=1 -->
+	<update id="updateContract" >
+		update ct_course set ct_course.camount=ct_course.camount-1
+		 where 
+		ct_course.ctid=#{ctid}
+		and (select cname from course where course.cid=ct_course.cid)=#{cname}
+		
+	</update>
+	
+	<resultMap type="com.rhine.gym.entity.CtMoreInfo" id="CtMoreInfoMap">
+		<id column="tctid"   property="ctid"/>
+		<result column="tctteacher"   property="ctteacher"/>
+		<result column="camount"   property="camount"/>
+		<result column="cname"   property="cname"/>
+		<result column="ctype"   property="ctype"/>
+
+	</resultMap>
+	
+	<select id="showMoreInfo" parameterType="java.lang.Integer" resultMap="CtMoreInfoMap">
+		select distinct
+		c.tctid,c.tctteacher,c.camount,c.cname,c.ctype,
+		m.mname,m.mphone
+		from
+		(select tctid,tctteacher,camount,cname,ctype from ct_course 
+		left join ct on ct_course.ctid=ct.tctid left join course on course.cid=ct_course.cid where ct.tctid=#{ctid}) as c,
+
+		(select ctid,mname,mphone from ct_mem 
+		left join ct on ct_mem.ctid=ct.tctid left join member on member.mid=ct_mem.mid where ct.tctid=#{ctid}) as m
+		 
+	</select>
+	
+
+</mapper>
