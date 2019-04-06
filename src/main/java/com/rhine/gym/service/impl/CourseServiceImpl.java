@@ -1,9 +1,10 @@
-package com.rhine.gym.service;
+package com.rhine.gym.service.impl;
 
 import org.springframework.stereotype.Service;
 
 import com.rhine.gym.dao.CourseDao;
 import com.rhine.gym.entity.Course;
+import com.rhine.gym.service.CourseService;
 
 import java.util.List;
 

@@ -54,11 +54,11 @@ public class CourseController{
 
    
 
-	        Page page = new Page(0,3);
+	        Page page = new Page(0,5);
 
 	        int total = courseList.size(); //取list的size（）得到个数
 	        page.setTotal(total);
-	 
+	     
 			mav.addObject("course",courseList);
 			mav.addObject("page",page);
 			mav.setViewName("listCourse");
@@ -129,7 +129,7 @@ public class CourseController{
 	 
 	        // 获取分页参数
 	        int start = 0;
-	        int count = 3;
+	        int count = 5;
 	 
 	        try {
 	            start = Integer.parseInt(request.getParameter("page.start"));

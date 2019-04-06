@@ -39,7 +39,7 @@
         <property name="dataSource" ref="dataSource"/>
         
         <!-- 扫描entity包 使用别名 -->
-        <property name="typeAliasesPackage" value="com.rhine.gym.entity"/>
+        <property name="typeAliasesPackage" value="com.rhine.gym.entity"/>   <!--  两个别名-->
         
         <!-- 扫描sql配置文件:mapper需要的xml文件 -->
         <property name="mapperLocations" value="classpath:mapper/*.xml"/>

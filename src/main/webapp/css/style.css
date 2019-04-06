@@ -11,6 +11,17 @@ div.listDIV {
     width: 600px;
     margin: 0 auto;
 }
+
+div.findcontractDIV {
+    width:620px;
+    margin: 0 auto;
+}
+
+div.listcontractDIV {
+    width: 800px;
+    margin: 0 auto;
+}
+
  
 div.editDIV {
     width: 400px;
