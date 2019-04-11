@@ -4,9 +4,9 @@ import java.util.List;
 
 public class ContractCourse{
 	  private int  ccid;
-	  private int ctid;
+	  private String ctid;
 	  private String tid;
-	  private int cid;
+	  private String cid;
 	  private int camount;
 	  
 
@@ -16,11 +16,11 @@ public class ContractCourse{
 	public void setCcid(int ccid) {
 		this.ccid = ccid;
 	}
-	public int getCtid() {
+	public String getCtid() {
 		return ctid;
 	}
-	public void setCtid(int ctid) {
-		this.ctid = ctid;
+	public void setCtid(String string) {
+		this.ctid = string;
 	}
 	public String getTid() {
 		return tid;
@@ -28,10 +28,10 @@ public class ContractCourse{
 	public void setTid(String tid) {
 		this.tid = tid;
 	}
-	public int getCid() {
+	public String getCid() {
 		return cid;
 	}
-	public void setCid(int cid) {
+	public void setCid(String cid) {
 		this.cid = cid;
 	}
 	public int getCamount() {

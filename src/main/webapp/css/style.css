@@ -3,7 +3,7 @@ body {
 }
  
 div.findDIV {
-    width: 500px;
+    width: 600px;
     margin: 0 auto;
 }
 
@@ -18,7 +18,7 @@ div.findcontractDIV {
 }
 
 div.listcontractDIV {
-    width: 800px;
+    width: 900px;
     margin: 0 auto;
 }
 
@@ -36,7 +36,32 @@ div.addDIV {
     width: 300px;
     margin: 0 auto;
 }
- 
+
+div.addCtDIV {
+    width: 700px;
+    margin: 0 auto;
+}
+
+div.courseMask{
+	display: none;
+}
+div.memberMask{
+	display: none;
+}
+div.Info{
+	 width: 700px;
+    margin: 0 auto;
+}
+div.memberInfo{
+	display:none;
+}
+div.courseInfo{
+	display:none;
+}
+
+div.addCtInfo{
+	display:none;
+}
 table.addTable {
     width: 100%;
     padding: 5px;

@@ -7,6 +7,7 @@ import com.rhine.gym.entity.Course;
 import com.rhine.gym.service.CourseService;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -18,8 +19,8 @@ public class CourseServiceImpl implements CourseService{
 	private CourseDao CourseDao;
 
 	//@Override
-	public List<Course> listCourseByName(String cname){
-		return CourseDao.listCourseByName(cname);
+	public List<Course> listCourseByName(Map map){
+		return CourseDao.listCourseByName(map);
 	}
 
 	 public void addCourse(Course cs) {

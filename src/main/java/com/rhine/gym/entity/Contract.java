@@ -12,6 +12,7 @@ public class Contract{
 	   private String tid;                //租户id
 	   private String ctteacher;
 	   private String ctsaler;
+	   
 	   @DateTimeFormat(pattern = "yyyy-MM-dd")  
 	   private Date ctbegin;             //起止日期
 	   

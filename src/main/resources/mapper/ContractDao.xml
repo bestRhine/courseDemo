@@ -39,7 +39,8 @@
 		and ct.tctid=ct_course.ctid		
 		and 1=1 -->
 	<update id="updateContract" >
-		update ct_course set ct_course.camount=ct_course.camount-1
+		update ct_course set 
+		ct_course.camount=ct_course.camount-1
 		 where 
 		ct_course.ctid=#{ctid}
 		and (select cname from course where course.cid=ct_course.cid)=#{cname}
@@ -52,21 +53,59 @@
 		<result column="camount"   property="camount"/>
 		<result column="cname"   property="cname"/>
 		<result column="ctype"   property="ctype"/>
-
+		<result column="mname"   property="mname"/>
+		<result column="mphone"   property="mphone"/>
+		
 	</resultMap>
 	
-	<select id="showMoreInfo" parameterType="java.lang.Integer" resultMap="CtMoreInfoMap">
-		select distinct
-		c.tctid,c.tctteacher,c.camount,c.cname,c.ctype,
-		m.mname,m.mphone
+	<select id="showMoreCtInfo" parameterType="java.lang.Integer" resultMap="CtMoreInfoMap">
+		select 
+		c.tctid,c.tctteacher,c.camount,c.cname,c.ctype
+
 		from
 		(select tctid,tctteacher,camount,cname,ctype from ct_course 
-		left join ct on ct_course.ctid=ct.tctid left join course on course.cid=ct_course.cid where ct.tctid=#{ctid}) as c,
+		left join ct on ct_course.ctid=ct.tctid left join course on course.cid=ct_course.cid where ct.tctid=#{ctid}) as c
 
+		
+	</select>
+	
+	<select id="showMoreMemInfo" parameterType="java.lang.Integer" resultMap="CtMoreInfoMap">
+		select distinct
+
+		m.mname,m.mphone
+		from
+		
 		(select ctid,mname,mphone from ct_mem 
 		left join ct on ct_mem.ctid=ct.tctid left join member on member.mid=ct_mem.mid where ct.tctid=#{ctid}) as m
 		 
 	</select>
 	
+		<insert id="addContract"  parameterType="com.rhine.gym.entity.Contract"> 
+		set foreign_key_checks=0;
+		insert into ct(tid,tctteacher,tctsaler,tctbegin,tctend,tctorder,tctpay,tctoperator,tcttype)
+		values
+		(#{tid},#{ctteacher},#{ctsaler},#{ctbegin},#{ctend},#{ctorder},#{ctpay},#{ctoperator},#{cttype})
+		
+	</insert>
+	
+	<select id="maxCurrentId" resultType="java.lang.Integer">
+		select max(tctid) from ct
+	</select>
+	
+	<insert id="insertMiddleContractCourse"  parameterType="com.rhine.gym.entity.ContractCourse">
+		insert into ct_course
+		values
+		(default, #{ctid},#{tid},#{cid},#{camount})
+		
+	</insert>
+	
+	<insert id="insertMiddleContractMember"  parameterType="com.rhine.gym.entity.ContractMember">
+		insert into ct_mem
+		values
+		(default, #{ctid},#{memid})
+		
+	</insert>
+	
+	<!-- delete时候要看权限，并且要删除中间表 -->
 
 </mapper>

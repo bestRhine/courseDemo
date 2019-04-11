@@ -15,14 +15,34 @@
 
 <meta charset="UTF-8">
 <title>课程管理</title>
+<script type="text/javascript">
+function addCtInfo(){
+	$("#addCtInfo").css("display","block")
+}
+
+function deleteCourse(cid,cname){
+	if(confirm('是否要删除【编号'+cid+':'+cname+'】课程？')){
+		location.href="${pageContext.request.contextPath }/deleteCourse?cid="+cid
+	}else{}
+}
+
+<%--function editCourse(cid){
+	  var url="${pageContext.request.contextPath}/editCourse?cid="+cid
+
+	  window.open(url,"编辑","height=310,width=700,top=300,left=400,scrollbars=no")     
+}  --%>
+
+
+</script>
+
 </head>
 <body>
-
+<%@ include file="menu.jsp" %><br/>
 <div class="findDIV">
  
     <div class="panel panel-success">
         <div class="panel-heading">
-            <h3 class="panel-title">查询course</h3>
+            <h3 class="panel-title">查询课程</h3>
         </div>
         <div class="panel-body">
  
@@ -52,11 +72,11 @@
     <table class="table table-striped table-bordered table-hover table-condensed">
         <thead>
         <tr class="success">
-            <th>courseid</th>
-            <th>memberid</th>
-            <th>name</th>
-            <th>info</th>
-            <th>type</th>
+            <th>课程号</th>
+            <th>租户</th>
+            <th>课程名</th>
+            <th>简介</th>
+            <th>类型</th>
  
             <th>编辑</th>
             <th>删除</th>
@@ -73,8 +93,8 @@
                 <td>${Course.ctype}</td>
 
  
-                <td><a href="${pageContext.request.contextPath }/editCourse?cid=${Course.cid}">修改</a></td>
-                <td><a href="${pageContext.request.contextPath }/deleteCourse?cid=${Course.cid}">删除</a></td>
+                <td><a href="${pageContext.request.contextPath}/editCourse?cid=${Course.cid}">修改</a></td>
+                <td><a href="javascript:deleteCourse('${Course.cid}','${Course.cname}')"  class="button">删除</a></td>
             </tr>
         </c:forEach>
  
@@ -131,24 +151,25 @@
             <h3 class="panel-title">增加课程</h3>
         </div>
         <div class="panel-body">
- 
+ 			<div class="btn btn-div" onclick="addCtInfo()" style="float:right">➕添加
             <form method="post" action="${pageContext.request.contextPath }/addCourse" role="form">
+            <div id="addCtInfo" style="display:none">
                 <table class="addTable">
                     <tr>
-                        <td>memberId：</td>
-                        <td><input type="text" name="tid" id="tid" placeholder="请在这里输入memberid"></td>
+                        <td>租户：</td>
+                        <td><input type="text" name="tid" id="tid" placeholder="请在这里输入租户"></td>
                     </tr>
                     <tr>
                         <td>姓名：</td>
                         <td><input type="text" name="cname" id="cname" placeholder="请在这里输入名字"></td>
                     </tr>
                     <tr>
-                        <td>info：</td>
+                        <td>简介：</td>
                         <td><input type="text" name="cinfo" id="cinfo" placeholder="请在这里输入简介"></td>
                     </tr>
                     <tr>
-                        <td>type：</td>
-                        <td><input type="text" name="ctype" id="ctype" placeholder="请在这里输入类型"> </td>
+                        <td>类型：</td>
+                        <td><input type="text" name="ctype" id="ctype" placeholder="1万能课/2私课/3团课"> </td>
                     </tr>
 
                     <tr class="submitTR">
@@ -159,6 +180,7 @@
                     </tr>
  
                 </table>
+               </div>
             </form>
         </div>
     </div>

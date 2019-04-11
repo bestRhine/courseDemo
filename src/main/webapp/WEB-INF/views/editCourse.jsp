@@ -1,21 +1,24 @@
 <!DOCTYPE html>
-<%@ page contentType="text/html;charset=UTF-8" language="java"
-         pageEncoding="UTF-8" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
- 
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
 <html>
 <head>
- 
-    <%-- 引入JQ和Bootstrap --%>
-    <script src="js/jquery/2.0.0/jquery.min.js"></script>
+
+<%-- 引入JQ和Bootstrap --%>
+     <script src="js/jquery/2.0.0/jquery.min.js"></script>
     <link href="css/bootstrap/3.3.6/bootstrap.min.css" rel="stylesheet">
-    <script src="js/bootstrap/3.3.6/bootstrap.min.js"></script>    
+    <script src="js/bootstrap/3.3.6/bootstrap.min.js"></script>  
     <link href="css/style.css" rel="stylesheet">
- 
-    <title>课程管理 - 编辑页面</title>
+
+<meta charset="UTF-8"> 
+   <title>课程管理-编辑页面</title>
 </head>
  
 <body>
+ <%@ include file="menu.jsp" %><br/>
  
 <div class="editDIV">
  
@@ -28,23 +31,23 @@
             <form method="post" action="${pageContext.request.contextPath }/updateCourse" role="form">
                 <table class="editTable">
                 	<tr>
-                        <td>courseId：</td>
-                        <td><input type="text" name="cid" id="cid" placeholder="请在这里输入cid"></td>
+                        <td>课程号：</td>
+                        <td><input type="text" name="cid" id="cid" placeholder="课程ID不能改变!"></td>
                     </tr>
                     <tr>
-                        <td>memberId：</td>
-                        <td><input type="text" name="tid" id="tid" placeholder="请在这里输入memberid"></td>
+                        <td>租户：</td>
+                        <td><input type="text" name="tid" id="tid" placeholder="请在这里输入租户"></td>
                     </tr>
                     <tr>
-                        <td>姓名：</td>
+                        <td>课程名：</td>
                         <td><input type="text" name="cname" id="cname" placeholder="请在这里输入名字"></td>
                     </tr>
                     <tr>
-                        <td>info：</td>
+                        <td>简介：</td>
                         <td><input type="text" name="cinfo" id="cinfo" placeholder="请在这里输入简介"></td>
                     </tr>
                     <tr>
-                        <td>type：</td>
+                        <td>类型：</td>
                         <td><input type="text" name="ctype" id="ctype" placeholder="请在这里输入类型"> </td>
                     </tr>
                     

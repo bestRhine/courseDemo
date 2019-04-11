@@ -13,7 +13,7 @@
  
     <div class="panel panel-success">
         <div class="panel-heading">
-            <h3 class="panel-title">查询course</h3>
+            <h3 class="panel-title">课程查询</h3>
         </div>
         <div class="panel-body">
  
@@ -40,11 +40,11 @@
     <table class="table table-striped table-bordered table-hover table-condensed">
         <thead>
         <tr class="success">
-            <th>courseid</th>
-            <th>memberid</th>
-            <th>name</th>
-            <th>info</th>
-            <th>type</th>
+            <th>课程号</th>
+            <th>租户</th>
+            <th>课程名</th>
+            <th>简介</th>
+            <th>类型</th>
  
             <th>编辑</th>
             <th>删除</th>

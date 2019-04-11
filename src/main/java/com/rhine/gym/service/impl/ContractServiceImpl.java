@@ -8,7 +8,9 @@ import org.springframework.stereotype.Service;
 
 import com.rhine.gym.dao.ContractDao;
 import com.rhine.gym.entity.Contract;
+import com.rhine.gym.entity.ContractCourse;
 import com.rhine.gym.entity.ContractItem;
+import com.rhine.gym.entity.ContractMember;
 import com.rhine.gym.entity.CtMoreInfo;
 import com.rhine.gym.service.ContractService;
 
@@ -30,8 +32,11 @@ public class ContractServiceImpl implements ContractService{
 		return contractDao.findBy(map);
 	}
 	
-	public List<CtMoreInfo> showMoreInfo(int ctid) {
-		return contractDao.showMoreInfo(ctid);
+	public List<CtMoreInfo> showMoreCtInfo(int ctid) {
+		return contractDao.showMoreCtInfo(ctid);
+	}
+	public List<CtMoreInfo> showMoreMemInfo(int ctid) {
+		return contractDao.showMoreMemInfo(ctid);
 	}
 	
 	@Override
@@ -46,4 +51,17 @@ public class ContractServiceImpl implements ContractService{
 		contractDao.transContract(contract);
 	}
 	
+	public void insertMiddleContractCourse(ContractCourse contractCourse) {
+		contractDao.insertMiddleContractCourse(contractCourse);
+	}
+	
+	public void insertMiddleContractMember(ContractMember contractMember) {
+		contractDao.insertMiddleContractMember(contractMember);
+	}
+
+	@Override
+	public int maxCurrentId() {
+		// TODO Auto-generated method stub
+		return contractDao.maxCurrentId();
+	}
 }

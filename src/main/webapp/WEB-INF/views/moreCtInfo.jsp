@@ -24,61 +24,57 @@ function updateContract(id,name){
 </script>
 		</head>
 <body>
-
-
- 
-
  
 <div class="listDIV">
     <table class="table table-striped table-bordered table-hover table-condensed">
         <thead>
         <tr class="success">
 			<th>合同号</th>
-			<th>教练</th>
             <th>课程类型</th>
-            <th>课程名</th>
-            <th>课程数量</th>
-
- 
-            <th>刷课</th>
-            <th>转课</th>
+			<th>教练</th>
+			<th>课程名</th>
+			<th>课时数量</th>
+			<th>操作1</th>
+			<th>操作2</th>
         </tr>
         </thead>
  
         <tbody>
-        <c:forEach items="${ctMoreInfoList}" var="CtMoreInfo" varStatus="status">
+        
+       <c:forEach items="${showMoreCtInfoList}" var="CtMoreInfo" varStatus="status">    <!-- 用类.属性进行索引遍历ctMoreInfoList -->
             <tr>
-
-				<td>${CtMoreInfo.ctid}</td>
-				<td>${CtMoreInfo.ctteacher}</td>
-                <td>${CtMoreInfo.ctype}</td>    <!-- 用类.属性进行索引遍历ctMoreInfoList -->
+           
+                <td>${CtMoreInfo.ctid}</td>
+                <td>${CtMoreInfo.ctype}</td>    
+                <td>${CtMoreInfo.ctteacher}</td> 
+                
        			<td>${CtMoreInfo.cname}</td>
                 <td>${CtMoreInfo.camount}</td>
- 
-                <td><a href="javascript:updateContract('${CtMoreInfo.ctid}','${CtMoreInfo.cname}')"  class=button>刷课
-					
-                <a></td>
+ 				
+                <td><a href="javascript:updateContract('${CtMoreInfo.ctid}','${CtMoreInfo.cname}')"  class=button>刷课	<a>				
+                </td>
                 
-                <td><a href="${pageContext.request.contextPath }/transContract?cid=${CtMoreInfo.cname}">转课</a></td>
+                <td><a href="${pageContext.request.contextPath }/transContract">转课</a></td>
             </tr>
-        </c:forEach>
- 
+        </c:forEach>    
         </tbody>
     </table>
 </div>
+
+
 
 <div class="listDIV">
     <table class="table table-striped table-bordered table-hover table-condensed">
         <thead>
         <tr class="success">
 			<th>会员名</th>
-			<th>Tel</th>
+			<th>电话</th>
 
         </tr>
         </thead>
  
         <tbody>
-        <c:forEach items="${ctMoreInfoList}" var="CtMoreInfo" varStatus="status">
+        <c:forEach items="${showMoreMemInfoList}" var="CtMoreInfo" varStatus="status">
             <tr>
 
 				<td>${CtMoreInfo.mname}</td>

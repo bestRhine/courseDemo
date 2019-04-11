@@ -2,6 +2,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <html>
 <head>
 
@@ -13,14 +15,25 @@
     <link href="css/style.css" rel="stylesheet">
 <meta charset="UTF-8">
 <title>合同</title>
+<script type="text/javascript">
+function showMore(ctid){
+  var url="${pageContext.request.contextPath}/showMoreInfo?ctid="+ctid
+
+  window.open(url,"更多信息","height=300,width=700,top=300,left=400,scrollbars=yes")     
+}
+function gmtToString(value){
+	
+}
+
+</script>
 </head>
 <body>
-
+<%@ include file="menu.jsp" %><br/>
 <div class="findcontractDIV">
  
     <div class="panel panel-success">
         <div class="panel-heading">
-            <h3 class="panel-title">按条件查询contract</h3>
+            <h3 class="panel-title">按以下条件查询合同</h3>
         </div>
         <div class="panel-body">
         
@@ -34,9 +47,9 @@
                     </tr>
                      <tr>
                         <td>日期：</td>
-                        <td><input type="datatime-local" name="ctbegin" id="ctbegin" placeholder="开始日期"></td>
+                        <td><input type="datatime-local" name="ctbegin" id="ctbegin" placeholder="开始日期 年/月/日"></td>
                         <td>-到-</td>
-                        <td><input type="datatime-local" name="ctend" id="ctend" placeholder="结束日期"></td>
+                        <td><input type="datatime-local" name="ctend" id="ctend" placeholder="结束日期 年/月/日"></td>
                     </tr>
                     <tr>    
                        <td>    <button type="提交" class="btn btn-success">提交</button>
@@ -79,23 +92,29 @@
                 <td>${Contract.tid}</td>
                 <td>${Contract.ctteacher}</td>
                 <td>${Contract.ctsaler}</td>
-
-                <td>${Contract.ctbegin}</td>
-                <td>${Contract.ctend}</td>
+                <td><fmt:formatDate value="${Contract.ctbegin}" pattern="yyyy-MM-dd" /> </td>
+                <td><fmt:formatDate value="${Contract.ctend}" pattern="yyyy-MM-dd" /></td>
                 
-				<td>${Contract.ctorder}</td>
+				<td>${Contract.ctorder}</td> 
 			    <td>${Contract.ctpay}</td>
 				<td>${Contract.ctoperator}</td>
 				
 				<td>${Contract.cttype}</td>
 
 
-                <td><a href="${pageContext.request.contextPath }/showMoreInfo?ctid=${Contract.ctid}">详细》</a></td>
-                
+                <td><a href="javascript:showMore('${Contract.ctid}')" class=button> 详细》</a></td>
+
             </tr>
         </c:forEach>
 	</tbody>
 	</table>
+</div>
+
+
+<div>
+	<c:if test="${resultMessage}!=null">
+	<br/><br/><font color="red">${resultMessage}</font>
+	</c:if>
 </div>
 
 </body>
