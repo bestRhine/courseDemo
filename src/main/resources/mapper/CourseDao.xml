@@ -44,7 +44,7 @@
     </select>
     
 	 <select id="list" resultMap="Course">
-        SELECT * FROM course  ORDER BY cid  desc  limit #{param1}, #{param2}
+        SELECT * FROM course  ORDER BY ctype  desc  limit #{param1}, #{param2}
 	 </select>
 	 
 	  <resultMap id="Course" type="Course">

@@ -45,12 +45,6 @@ public class ContractServiceImpl implements ContractService{
 		contractDao.updateContract(ctid,cname);
 	}
 
-	@Override
-	public void transContract(Contract contract) {
-		// TODO Auto-generated method stub
-		contractDao.transContract(contract);
-	}
-	
 	public void insertMiddleContractCourse(ContractCourse contractCourse) {
 		contractDao.insertMiddleContractCourse(contractCourse);
 	}
@@ -63,5 +57,17 @@ public class ContractServiceImpl implements ContractService{
 	public int maxCurrentId() {
 		// TODO Auto-generated method stub
 		return contractDao.maxCurrentId();
+	}
+
+	@Override
+	public void contractTransCourse(Map map) { 
+		// TODO Auto-generated method stub
+		contractDao.contractTransCourse(map);
+	}
+
+	@Override
+	public void contractChangeTeacher(Contract contract) {
+		// TODO Auto-generated method stub
+		contractDao.contractChangeTeacher(contract);
 	}
 }

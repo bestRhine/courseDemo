@@ -22,12 +22,15 @@ public interface ContractDao{
 	
 	void  updateContract(@Param("ctid") int ctid,@Param("cname") String cname);
 	
-	void  transContract(Contract contract);    //事务操作
+	void  contractTransCourse(@Param("params") Map map);
+	void  contractChangeTeacher(Contract contract);
 	
 	void  insertMiddleContractCourse(ContractCourse contractCourse);
 
 	void insertMiddleContractMember(ContractMember contractMember);
 	
 	int maxCurrentId();
+
+	
 	
 }

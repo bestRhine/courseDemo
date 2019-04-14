@@ -4,14 +4,28 @@ package com.rhine.gym.entity;
 public class CtMoreInfo {
 	
 	private int ctid;
-	private String ctteacher;
 	private int camount;
 	private String cname;
-	private String ctype;
+	private String camounttotal;
+	
+	private String ctcoursetype;
 	
 	private String mname;
 	private String mphone;
 	
+	
+	public String getCtcoursetype() {
+		return ctcoursetype;
+	}
+	public void setCtcoursetype(String ctcoursetype) {
+		this.ctcoursetype = ctcoursetype;
+	}
+	public int getCtid() {
+		return ctid;
+	}
+	public void setCtid(int ctid) {
+		this.ctid = ctid;
+	}
 	public String getMname() {
 		return mname;
 	}
@@ -23,18 +37,6 @@ public class CtMoreInfo {
 	}
 	public void setMphone(String mphone) {
 		this.mphone = mphone;
-	}
-	public String getCtteacher() {
-		return ctteacher;
-	}
-	public void setCtteacher(String ctteacher) {
-		this.ctteacher = ctteacher;
-	}
-	public int getCtid() {
-		return ctid;
-	}
-	public void setCtid(int ctid) {
-		this.ctid = ctid;
 	}
 	public int getCamount() {
 		return camount;
@@ -48,12 +50,13 @@ public class CtMoreInfo {
 	public void setCname(String cname) {
 		this.cname = cname;
 	}
-	public String getCtype() {
-		return ctype;
+	public String getCamounttotal() {
+		return camounttotal;
 	}
-	public void setCtype(String ctype) {
-		this.ctype = ctype;
+	public void setCamounttotal(String camounttotal) {
+		this.camounttotal = camounttotal;
 	}
+
 	
 	
 }

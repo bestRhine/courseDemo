@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rhine.gym.dao.MemberDao">
+    <select id="getTotal" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM member
+    </select>   
+     <select id="list" resultMap="Member">
+        SELECT * FROM member ORDER BY mid  desc  limit #{param1},#{param2}
+	 </select>
+	 
+	 <select id="listOne"  parameterType="java.util.HashMap" resultMap="Member">
+        SELECT * FROM member where mid=#{params.mid}
+	 </select>
+	 
+	 <select id="listByCondition" parameterType="java.util.HashMap" resultMap="Member">
+        SELECT * FROM member where 1=1
+        <choose> 
+	 	<when test="params.mname!=null">
+	 	and  mname like #{params.mname}
+	 	</when> 
+	 	<when test="params.mid!=null">
+	 	and mid=#{params.mid}
+	 	</when>
+	 	<otherwise>
+	 	and 1=1
+	 	</otherwise>
+	 	</choose>
+
+	 </select>
+	 
+	  <resultMap id="Member" type="Member">
+        <id column="mid" property="mid"/>
+        <result column="mname" property="mname"/>
+        <result column="mgender" property="mgender"/>
+        <result column="mphone" property="mphone"/>
+
+     </resultMap>       
+</mapper> 

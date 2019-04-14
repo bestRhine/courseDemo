@@ -8,8 +8,14 @@ public class ContractCourse{
 	  private String tid;
 	  private String cid;
 	  private int camount;
-	  
+	  private int camounttotal;
 
+	public int getCamounttotal() {
+		return camounttotal;
+	}
+	public void setCamounttotal(int camounttotal) {
+		this.camounttotal = camounttotal;
+	}
 	public int getCcid() {
 		return ccid;
 	}

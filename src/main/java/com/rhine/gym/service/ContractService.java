@@ -16,7 +16,9 @@ public interface ContractService{
 	
 	List<Contract>  findBy(Map map);
 	void  updateContract(int ctid,String cname);
-	void  transContract(Contract contract);    //事务操作
+	
+	void  contractTransCourse(Map map);
+	void  contractChangeTeacher(Contract contract);
 	
 	void insertMiddleContractCourse(ContractCourse contractCourse);
 	void insertMiddleContractMember(ContractMember contractMember);

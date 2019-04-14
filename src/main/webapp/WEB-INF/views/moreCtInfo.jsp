@@ -4,6 +4,7 @@
 
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <html>
 <head>
 
@@ -21,19 +22,55 @@ function updateContract(id,name){
 		location.href="${pageContext.request.contextPath }/updateContract?ctid="+id+"&cname="+name
 	}else{}
 }
+
+function contractTransCourse(id,name,amount){
+	var cid=id
+	if(confirm('确认要把【'+name+'】课程，剩余课时【'+amount+'】转给他人？')){
+		location.href="${pageContext.request.contextPath }/contractTransCourse?ctid="+cid
+	}else{}
+}
+
 </script>
 		</head>
 <body>
  
-<div class="listDIV">
+ <%@ include file="menu.jsp" %><br/>
+ 
+ <div class="listDIV">
     <table class="table table-striped table-bordered table-hover table-condensed">
         <thead>
         <tr class="success">
 			<th>合同号</th>
-            <th>课程类型</th>
 			<th>教练</th>
+			<th>合同类型</th>
+			<th>开始时间</th>
+			<th>结束时间</th>
+        </tr>
+        </thead>
+ 
+        <tbody>
+        <c:forEach items="${contractList}" var="Contract" varStatus="status">
+            <tr>
+
+				<td>${Contract.ctid}</td>
+            	<td>${Contract.ctteacher}</td>
+				<td>${Contract.cttype}</td>
+				<td><fmt:formatDate value="${Contract.ctbegin}" pattern="yyyy-MM-dd" /> </td>
+                <td><fmt:formatDate value="${Contract.ctend}" pattern="yyyy-MM-dd" /></td>
+            </tr>
+        </c:forEach>
+ 
+        </tbody>
+    </table>
+</div>
+
+<div class="listDIV">
+    <table class="table table-striped table-bordered table-hover table-condensed">
+        <thead>
+        <tr class="success">
 			<th>课程名</th>
-			<th>课时数量</th>
+			<th>总课时数</th>
+			<th>剩余课时</th>			
 			<th>操作1</th>
 			<th>操作2</th>
         </tr>
@@ -43,18 +80,19 @@ function updateContract(id,name){
         
        <c:forEach items="${showMoreCtInfoList}" var="CtMoreInfo" varStatus="status">    <!-- 用类.属性进行索引遍历ctMoreInfoList -->
             <tr>
-           
-                <td>${CtMoreInfo.ctid}</td>
-                <td>${CtMoreInfo.ctype}</td>    
-                <td>${CtMoreInfo.ctteacher}</td> 
                 
        			<td>${CtMoreInfo.cname}</td>
+       			<td>${CtMoreInfo.camounttotal}</td> 
                 <td>${CtMoreInfo.camount}</td>
- 				
-                <td><a href="javascript:updateContract('${CtMoreInfo.ctid}','${CtMoreInfo.cname}')"  class=button>刷课	<a>				
-                </td>
                 
-                <td><a href="${pageContext.request.contextPath }/transContract">转课</a></td>
+ 				
+                <td>
+                <a href="javascript:updateContract('${CtMoreInfo.ctid}','${CtMoreInfo.cname}')"  class="button">刷课	</a>				
+                </td>                
+                <td>
+                <a href="javascript:contractTransCourse('${CtMoreInfo.ctid}','${CtMoreInfo.cname}','${CtMoreInfo.camount}')" class="button">转课</a>
+                </td>
+           		
             </tr>
         </c:forEach>    
         </tbody>

@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper
     PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    "http://www.mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
 <mapper namespace="com.rhine.gym.dao.ContractDao">   
 	<resultMap type="com.rhine.gym.entity.Contract" id="ContractMap" >
 	 <id column="tctid"   property="ctid"/>
@@ -14,14 +15,20 @@
 		<result column="tctpay"   property="ctpay"/>
 		<result column="tctoperator"   property="ctoperator"/>
 		<result column="tcttype"   property="cttype"/>  
+		<result column="tctcoursetype"  property="ctcoursetype"/>
 
 	</resultMap>
 					
 	 <sql id="query_contract_where">	
 	 	<if test="params.ctid!=null"> and ct.tctid=#{params.ctid} </if>	
 		<if test="params.ctteacher!=null"> and ct.tctteacher like #{params.ctteacher} </if>		
+		<if test="params.cname!=null">and ct.tctid in(select ctid from ct_course where ct_course.cid in(select cid from course where cname like #{params.cname}))
+		</if>
+		<if test="params.mname!=null">and ct.tctid in(select ctid from ct_mem where ct_mem.mid in(select mid from member where mname like #{params.mname}))	
+		</if>
 		<if test="params.ctbegin!=null">and Date(ct.tctbegin)<![CDATA[>=]]>#{params.ctbegin}</if>
 		<if test="params.ctend!=null">and Date(ct.tctend)<![CDATA[<=]]>#{params.ctend}</if>
+		<if test="params.ctcoursetype!=null">and ct.tctcoursetype=#{params.ctcoursetype}</if>
 	</sql>
 
 	
@@ -29,8 +36,14 @@
 	<select id="findBy" parameterType="java.util.HashMap" resultMap="ContractMap">
 		select * from ct
 		where 1=1
-		<include refid="query_contract_where"></include>
-		
+	     <choose>
+	    <when test="params.index!=null">
+	     	order by tctid desc limit 0,#{params.index} 
+	    </when>
+	    <otherwise>
+		    <include refid="query_contract_where"></include>
+	    </otherwise>
+		</choose>
 	</select>
 		
 		<!-- 	select    from ct,ct_course,course
@@ -48,25 +61,25 @@
 	</update>
 	
 	<resultMap type="com.rhine.gym.entity.CtMoreInfo" id="CtMoreInfoMap">
-		<id column="tctid"   property="ctid"/>
-		<result column="tctteacher"   property="ctteacher"/>
+		<id column="tctid"  property="ctid"/>
 		<result column="camount"   property="camount"/>
 		<result column="cname"   property="cname"/>
-		<result column="ctype"   property="ctype"/>
+		<result column="camounttotal"   property="camounttotal"/>
 		<result column="mname"   property="mname"/>
 		<result column="mphone"   property="mphone"/>
+		<result column="tctcoursetype" property="ctcoursetype"/>
 		
 	</resultMap>
 	
 	<select id="showMoreCtInfo" parameterType="java.lang.Integer" resultMap="CtMoreInfoMap">
 		select 
-		c.tctid,c.tctteacher,c.camount,c.cname,c.ctype
-
+		c.camounttotal,c.camount,c.cname,c.tctid,c.tctcoursetype
 		from
-		(select tctid,tctteacher,camount,cname,ctype from ct_course 
-		left join ct on ct_course.ctid=ct.tctid left join course on course.cid=ct_course.cid where ct.tctid=#{ctid}) as c
-
-		
+		(select camount,cname,camounttotal,tctid,tctcoursetype  from ct_course 
+		left join ct on ct_course.ctid=ct.tctid left join course on course.cid=ct_course.cid ) as c
+		where 
+		c.tctid=#{ctid}
+	
 	</select>
 	
 	<select id="showMoreMemInfo" parameterType="java.lang.Integer" resultMap="CtMoreInfoMap">
@@ -82,9 +95,9 @@
 	
 		<insert id="addContract"  parameterType="com.rhine.gym.entity.Contract"> 
 		set foreign_key_checks=0;
-		insert into ct(tid,tctteacher,tctsaler,tctbegin,tctend,tctorder,tctpay,tctoperator,tcttype)
+		insert into ct(tid,tctteacher,tctsaler,tctbegin,tctend,tctorder,tctpay,tctoperator,tcttype,tctcoursetype)
 		values
-		(#{tid},#{ctteacher},#{ctsaler},#{ctbegin},#{ctend},#{ctorder},#{ctpay},#{ctoperator},#{cttype})
+		(#{tid},#{ctteacher},#{ctsaler},#{ctbegin},#{ctend},#{ctorder},#{ctpay},#{ctoperator},#{cttype},#{ctcoursetype})
 		
 	</insert>
 	
@@ -95,7 +108,7 @@
 	<insert id="insertMiddleContractCourse"  parameterType="com.rhine.gym.entity.ContractCourse">
 		insert into ct_course
 		values
-		(default, #{ctid},#{tid},#{cid},#{camount})
+		(default, #{ctid},#{tid},#{cid},#{camount},#{camounttotal})
 		
 	</insert>
 	
@@ -107,5 +120,15 @@
 	</insert>
 	
 	<!-- delete时候要看权限，并且要删除中间表 -->
+	
+	<insert id="contractTransCourse" parameterType="java.util.HashMap">
+		set  foreign_key_checks=0;
+		
+		update ct_mem set mid=(select mid from member where mname=#{params.mname} and mphone=#{params.mphone}) where ct_mem.ctid=#{params.ctid};
+		  <!-- 转客人信息不确定，无法准确查出 -->
+		update ct set tctorder=tctorder+#{params.ctorder},tctoperator=#{params.ctoperator},
+		tcttype=#{params.cttype}  where ct.tctid=#{params.ctid}		
 
+	</insert>
+	
 </mapper>

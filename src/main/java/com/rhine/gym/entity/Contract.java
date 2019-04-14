@@ -22,9 +22,16 @@ public class Contract{
 	   private  float  ctorder;           //decimal
 	   private float  ctpay;                      //decimal
 	   private String ctoperator;          //录入人
-	   private String cttype;                     // comment '表示是新办、转让、更换教练',
+	   private String cttype;                     // comment '表示是新办、转让、更换教练'
+	   private String ctcoursetype;          //合同关联课程类型，私课组课
 
 
+	public String getCtcoursetype() {
+		return ctcoursetype;
+	}
+	public void setCtcoursetype(String ctcoursetype) {
+		this.ctcoursetype = ctcoursetype;
+	}
 	public String getCtid() {
 		return ctid;
 	}
