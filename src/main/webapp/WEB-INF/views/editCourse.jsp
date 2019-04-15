@@ -32,23 +32,26 @@
                 <table class="editTable">
                 	<tr>
                         <td>课程号：</td>
-                        <td><input type="text" name="cid" id="cid" placeholder="课程ID不能改变!"></td>
+                        <td><c:if test="${cid!=null}"><font color="red">${cid}</c:if></td>
                     </tr>
+                    <input type="hidden" name="cid" id="cid" value="${cid}">
+                    <tr>
+                        <td>课程名：</td>
+                        <td><c:if test="${cname!=null}"><font color="red">${cname}</c:if></td>
+                    </tr>
+                    <input type="hidden" name="cname" id="cname" value="${cname}">
                     <tr>
                         <td>租户：</td>
                         <td><input type="text" name="tid" id="tid" placeholder="请在这里输入租户"></td>
                     </tr>
-                    <tr>
-                        <td>课程名：</td>
-                        <td><input type="text" name="cname" id="cname" placeholder="请在这里输入名字"></td>
-                    </tr>
+                    
                     <tr>
                         <td>简介：</td>
-                        <td><input type="text" name="cinfo" id="cinfo" placeholder="请在这里输入简介"></td>
+                        <td><input type="text" name="cinfo" id="cinfo" placeholder="输入简介：等级，课时费等"></td>
                     </tr>
                     <tr>
                         <td>类型：</td>
-                        <td><input type="text" name="ctype" id="ctype" placeholder="请在这里输入类型"> </td>
+                        <td><input type="text" name="ctype" id="ctype" placeholder="输入课程类型"> </td>
                     </tr>
                     
                     <tr class="submitTR">

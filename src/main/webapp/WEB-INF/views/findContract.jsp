@@ -80,6 +80,7 @@ function getType(){
 
 
 <div class="listcontractDIV">
+      <c:if  test="${contractList!=null}">
       <table class="table table-striped table-bordered table-hover table-condensed">
         <thead>
         <tr class="success">
@@ -121,19 +122,28 @@ function getType(){
 
 
                 <td><a href="${pageContext.request.contextPath}/showMoreInfo?ctid=${Contract.ctid}" class=button> 详细》</a></td>
-
+		
             </tr>
         </c:forEach>
+        
 	</tbody>
+		
 	</table>
+	
+	</c:if>
+
+<div class="addDIV">
+	<c:if  test="${resultMessage!=null}">
+       <b><font color="red">${resultMessage}</b>
+   </c:if>
+</div>	
+
 </div>
 
 
 <div>
 	
-	<c:if test="${resultMessage}!=null">
-	<br/><br/><font color="red">${resultMessage}</font>
-	</c:if>
+	
 
 </div>
 

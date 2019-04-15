@@ -10,10 +10,16 @@ public class CtMoreInfo {
 	
 	private String ctcoursetype;
 	
+	private int mid;
 	private String mname;
 	private String mphone;
 	
-	
+	public int getMid() {
+		return mid;
+	}
+	public void setMid(int mid) {
+		this.mid = mid;
+	}
 	public String getCtcoursetype() {
 		return ctcoursetype;
 	}

@@ -16,19 +16,32 @@
 <meta charset="UTF-8">
  <title>合同管理 - 转课页面</title>
 
-<%-- <script type="text/javascript">
- $.ajax({
-		type:'get',
-		url: '${pageContext.request.contextPath}/contractTransCourse',
-		data:{'cid':cid},
-	    success:function(req){
- 			   var ctid=document.getElementsByName("ctid").value
-	    },
-		error:function(req) {alert("操作异常！ 重试")}
-
-	})
+ <script type="text/javascript">
+function checkTransContract(){ 
+        if($("#mname").val()==null||$("#mname").val()==""){
+            alert("会员名不能为空！");
+            return false;
+        }      
+        var phone = /^(((13[0-9]{1})|(15[0-9]{1})|(18[0-9]{1}))+\d{8})$/
+        if(!(phone.test($("#mphone").val())&&phone.test($("#mphone").val()))) 
+        { 
+            alert("请输入正确完整的电话号码！"); 
+            return false; 
+        } 
+        
+        if($("#ctpay").val()==null||$("#ctpay").val()==""){
+            alert("转课手续费不能为空！");
+            return false;
+        }
+        if($("#ctoperator").val()==null||$("#ctoperator").val()==""){
+            alert("操作员工不能为空！");
+            return false;
+        }
+             
+        return true;
+   }
 </script>
---%>
+
 </head>
  
 <body>
@@ -43,12 +56,14 @@
         </div>
         <div class="panel-body">
  
-            <form method="post" action="${pageContext.request.contextPath }/transContract" role="form">
+            <form method="post" action="${pageContext.request.contextPath }/transContract" role="form" onsubmit="return checkTransContract()">
                 <table class="editTable">
                 	<tr>
                         <td>转课合同号：</td>
-                        <td><input type="text" name="ctid" id="ctid" placeholder="请在这里输入被转合同号"></td>
+                        <td><c:if test="${ctid!=null}"><font color="red">${ctid}</c:if>
+                        </td>
                     </tr>
+                		<td><input type="hidden" name="ctid" id="ctid" value="${ctid}"></td>
                 	
                 	<tr>
                         <td>姓名：</td>
@@ -60,7 +75,7 @@
                     </tr>
                     <tr>
                         <td>手续费：</td>
-                        <td><input type="text" name="ctorder" id="ctorder" placeholder="请在这里输入手续费"></td>
+                        <td><input type="text" name="ctpay" id="ctpay" placeholder="请在这里输入手续费"></td>
                     </tr>
                     <tr>
                         <td>操作员工：</td>

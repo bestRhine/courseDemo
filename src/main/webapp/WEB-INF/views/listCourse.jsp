@@ -93,7 +93,7 @@ function deleteCourse(cid,cname){
                 <td>${Course.ctype}</td>
 
  
-                <td><a href="${pageContext.request.contextPath}/editCourse?cid=${Course.cid}">修改</a></td>
+                <td><a href="${pageContext.request.contextPath}/editCourse?cid=${Course.cid}&cname=${Course.cname}">修改</a></td>
                 <td><a href="javascript:deleteCourse('${Course.cid}','${Course.cname}')"  class="button">删除</a></td>
             </tr>
         </c:forEach>

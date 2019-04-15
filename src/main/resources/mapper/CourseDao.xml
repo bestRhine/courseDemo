@@ -26,8 +26,9 @@
 	</delete>
 	
 	    <update id="updateCourse" parameterType="Course">
-        UPDATE course SET tid = #{tid}, cname = #{cname},
-        cinfo=#{cinfo},ctype=#{ctype}  WHERE cid = #{cid}
+         UPDATE course SET tid = #{tid}, cinfo=#{cinfo},ctype=#{ctype}
+         WHERE 
+         cid = #{cid} and cname = #{cname}
     </update>
     
 	<insert id="addCourse" parameterType="Course">

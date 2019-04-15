@@ -98,10 +98,10 @@ public class CourseController{
 	    }
 	 
 	   @RequestMapping("/editCourse")
-	   	public ModelAndView editCourse(int cid) {
+	   	public ModelAndView editCourse(int cid,String cname) {
 	        ModelAndView mav = new ModelAndView("editCourse");
-	        Course cs = courseService.getCourse(cid);
-	        mav.addObject("course", cs);
+	        mav.addObject("cid",cid);
+	        mav.addObject("cname", cname);
 	        return mav; 
 		}
 	 

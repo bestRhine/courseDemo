@@ -17,7 +17,7 @@
 <script type="text/javascript">
 	function changeType(){
 		var type=document.getElementById("indexType").value	
-		$("#ctcoursetype").val(type)
+		$("#ctcoursetype").val(type) 
 	}
 	function searchCourse(){
 		var cname = document.getElementById("cnameQuery").value
@@ -49,7 +49,7 @@
 						$("#courseList").html(oldHtml+cInfo)
 					}								
 					$("#courseList").html("<table style='width:400px;text-align:center;' border=1>"+
-							$("#courseList").html()+"</table>")
+							$("#courseList").html()+"</table>") 
 							
 					$(".courseMask").css("display","block")
 				},
@@ -113,6 +113,9 @@
 		$(".courseMask").css("display","none")
 		$(".memberMask").css("display","none")
 	}
+	function cancelWindowMask(){
+		$("#cancelWindowMask").css("display","none")    <!--在css中设置布局的，这里直接#。。获取，否则蒙版mask类似上一个函数-->
+	}
 	
 	function searchMember(){
 		<!--addMember($("#mname").val())-->
@@ -145,8 +148,8 @@
 					}
 							
 					$("#memberList").html("<table style='width:400px;text-align:center;' border=1>"+
-							$("#memberList").html()+"</table>") 
-							
+							$("#memberList").html()+"</table>")  
+							 
 					$(".memberMask").css("display","block")
 				},
 				error:function(data) {alert("操作异常！ 重试")}
@@ -184,13 +187,37 @@
 				$("#memberInfo").html("<table style='width:500px;text-align:center;' border=1>"+
 						$("#memberInfo").html()+"</table>")
 				$(".memberMask").css("display","none")
-				$("#memberInfo").css("display","block")
+				$("#memberInfo").css("display","block") 
 			},
 			error:function(data) {alert("操作异常！ 重试")}
 
 		});
     }
-		 
+	function checkAddContract(){ 
+        if($("#ctoperator").val()==null||$("#ctoperator").val()==""){
+            alert("操作员工不能为空！");
+            return false;
+        }
+        if($("#ctteacher").val()==null||$("#ctteacher").val()==""||$("#ctsaler").val()==null||$("#ctsaler").val()==""){
+            alert("（上课/售课教练）不能为空！");
+            return false;
+        }
+        
+        var reg = /^[1-9]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/
+        if(!(reg.test($("#ctbegin").val())&&reg.test($("#ctend").val()))) 
+        { 
+            alert("请输入正确完整的日期格式！"); 
+            return false; 
+        } 
+        
+        if($("#ctorder").val()==null||$("#ctorder").val()==""||$("#ctpay").val()==null||$("#ctpay").val()==""){
+            alert("订单/实付金额不能为空！");
+            return false;
+        }
+        
+        return true;
+   }
+	 
 			
 </script>
 
@@ -199,8 +226,8 @@
 <%@ include file="menu.jsp" %><br/>
 
 
-<form method="post" action="${pageContext.request.contextPath }/addContract" role="form">
- 
+<form method="post" action="${pageContext.request.contextPath }/addContract" role="form"  onsubmit=" return checkAddContract()">
+                                  <!-- onsubmit做校验，如果输入参数不合法，组织表单提交。这里必须是return+function() -->
 <div class="addCtDIV">
  
     <div class="panel panel-success">
@@ -304,7 +331,18 @@
 
 </form>
 
+<div class="editDIV">
+		<c:if test="${resultMessage!=null}">
+		<div id="cancelWindowMask" style="display:block">
+		<div style="background-color:#B4EEB4;height:70px;width:400;color:#FF3030;font-size:18px;padding-left:20px;">
+		<font style="float:right;padding-right:20px;" onclick="cancelWindowMask()">X</font>
+		<b>${resultMessage}</b>
 
+		</div>
+		</div>
+		</c:if>
+</div>
+</div>
 
 <div class="courseMask">
  <div class="addCtDIV"> 

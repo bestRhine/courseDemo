@@ -6,6 +6,7 @@
     <select id="getTotal" resultType="java.lang.Integer">
         SELECT COUNT(*) FROM member
     </select>   
+    
      <select id="list" resultMap="Member">
         SELECT * FROM member ORDER BY mid  desc  limit #{param1},#{param2}
 	 </select>
@@ -23,12 +24,20 @@
 	 	<when test="params.mid!=null">
 	 	and mid=#{params.mid}
 	 	</when>
+	 	<when test="params.mphone!=null">
+	 	and mphone=#{params.mphone}
+	 	</when>
 	 	<otherwise>
 	 	and 1=1
 	 	</otherwise>
 	 	</choose>
 
 	 </select>
+	 
+	 <select id="findMid"  parameterType="java.util.HashMap" resultType="java.lang.Integer">
+        SELECT mid FROM member where mname=#{params.mname} and mphone=#{params.mphone}
+	 </select>
+	          <!-- ifnull判断，如果查询结果为empty set 则返回0 -->
 	 
 	  <resultMap id="Member" type="Member">
         <id column="mid" property="mid"/>

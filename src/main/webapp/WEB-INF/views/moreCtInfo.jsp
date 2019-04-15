@@ -18,7 +18,7 @@
 <title>合同信息</title>
 <script type="text/javascript">
 function updateContract(id,name){
-	if(confirm('是否要刷【'+name+'】课程？')){
+	if(confirm('是否要刷【'+name+'】课程？确认已预约课程？')){
 		location.href="${pageContext.request.contextPath }/updateContract?ctid="+id+"&cname="+name
 	}else{}
 }
@@ -71,8 +71,11 @@ function contractTransCourse(id,name,amount){
 			<th>课程名</th>
 			<th>总课时数</th>
 			<th>剩余课时</th>			
-			<th>操作1</th>
-			<th>操作2</th>
+			<th>刷课</th>
+			<c:if test="${ctcoursetype==null}">
+			<th>转课</th>
+			<th>更换教练</th>
+			</c:if>
         </tr>
         </thead>
  
@@ -88,11 +91,16 @@ function contractTransCourse(id,name,amount){
  				
                 <td>
                 <a href="javascript:updateContract('${CtMoreInfo.ctid}','${CtMoreInfo.cname}')"  class="button">刷课	</a>				
-                </td>                
+                </td> 
+                
+                 <c:if test="${ctcoursetype==null}">              
                 <td>
                 <a href="javascript:contractTransCourse('${CtMoreInfo.ctid}','${CtMoreInfo.cname}','${CtMoreInfo.camount}')" class="button">转课</a>
                 </td>
-           		
+                <td>
+                <a href="javascript:contractTransCourse('${CtMoreInfo.ctid}')" class="button">更换教练</a>
+                </td>
+           		</c:if>
             </tr>
         </c:forEach>    
         </tbody>
@@ -113,11 +121,10 @@ function contractTransCourse(id,name,amount){
  
         <tbody>
         <c:forEach items="${showMoreMemInfoList}" var="CtMoreInfo" varStatus="status">
-            <tr>
-
-				<td>${CtMoreInfo.mname}</td>
-            	<td>${CtMoreInfo.mphone}</td>
-
+            <tr>           		
+            		<td><font color="red">${CtMoreInfo.mname}</td>
+       			    <td><font color="red">${CtMoreInfo.mphone}</td> 
+            	  
             </tr>
         </c:forEach>
  

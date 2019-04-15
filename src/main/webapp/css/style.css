@@ -24,7 +24,7 @@ div.listcontractDIV {
 
  
 div.editDIV {
-    width: 400px;
+    width: 450px;
     margin: 0 auto;
 }
  
@@ -46,6 +46,9 @@ div.courseMask{
 	display: none;
 }
 div.memberMask{
+	display: none;
+}
+div.cancelWindowMask{
 	display: none;
 }
 div.Info{

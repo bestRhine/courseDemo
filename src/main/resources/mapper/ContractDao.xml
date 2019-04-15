@@ -123,12 +123,11 @@
 	
 	<insert id="contractTransCourse" parameterType="java.util.HashMap">
 		set  foreign_key_checks=0;
+		insert into ct_mem values(default,#{params.ctid},#{params.mid});
 		
-		update ct_mem set mid=(select mid from member where mname=#{params.mname} and mphone=#{params.mphone}) where ct_mem.ctid=#{params.ctid};
-		  <!-- 转客人信息不确定，无法准确查出 -->
-		update ct set tctorder=tctorder+#{params.ctorder},tctoperator=#{params.ctoperator},
+		update ct set tctpay=tctpay+#{params.ctpay},tctoperator=#{params.ctoperator},
 		tcttype=#{params.cttype}  where ct.tctid=#{params.ctid}		
-
+						
 	</insert>
 	
 </mapper>
