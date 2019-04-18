@@ -64,7 +64,7 @@ function addTeacher(teacher){
 		var ctid=document.getElementById("getCtid").value	
 		$.ajax({
             url : "/gymms/changeTeacher",                           <!--get方式请求,url要从项目名开始重新拼接-->
-            type : "get", 
+            type : "get",  
             dataType: "json", 
             data : "ctid="+ctid+"&empName="+empName,                <!--等价于URL后面拼接参数-->
             success:function(result) { 

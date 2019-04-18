@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rhine.gym.dao.EmpRoleDao">                <!--  很重要-->
+	<select id="findEmpnamesByRname"	parameterType="java.lang.Integer"  resultMap="EmployeeMap">  
+		select ename,ephone
+		from sys_emp_role 
+		left join sysrole on sys_emp_role.rid=sysrole.rid
+		left join employee on sys_emp_role.eid=employee.eid 
+		where 1=1
+		<if test="params.rname!=null">and rname=#{params.rname}</if> 
+		<if test="params.empName!=null">and ename like #{params.empName}</if>   <!-- 入参为hashmap传递多个参数时，一定要使用param,尤其注意if判断中，也要使用 -->
+	</select>   														   <!-- if test 中不用预编译#{} -->
+	<resultMap  id="EmployeeMap" type="Employee">
+		<result column="ename" property="empName"/>
+		<result column="egender" property="empGender"/>
+		<result column="ephone" property="empPhone"/>
+	</resultMap>
+	 
+</mapper>
