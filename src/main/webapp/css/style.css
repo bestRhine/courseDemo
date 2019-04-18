@@ -51,6 +51,12 @@ div.memberMask{
 div.cancelWindowMask{
 	display: none;
 }
+div.teacherMask{
+	display: none;
+}
+div.salerMask{
+	display: none;
+}
 div.Info{
 	 width: 700px;
     margin: 0 auto;

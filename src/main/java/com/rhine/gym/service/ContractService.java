@@ -3,6 +3,8 @@ package com.rhine.gym.service;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.rhine.gym.entity.Contract;
 import com.rhine.gym.entity.ContractCourse;
 import com.rhine.gym.entity.ContractItem;
@@ -18,7 +20,7 @@ public interface ContractService{
 	void  updateContract(int ctid,String cname);
 	
 	void  contractTransCourse(Map map);
-	void  contractChangeTeacher(Contract contract);
+	void  changeTeacher(int ctid,String empName);
 	
 	void insertMiddleContractCourse(ContractCourse contractCourse);
 	void insertMiddleContractMember(ContractMember contractMember);

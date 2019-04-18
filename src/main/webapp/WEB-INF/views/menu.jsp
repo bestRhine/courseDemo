@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+	<!DOCTYPE html>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 
@@ -17,7 +17,7 @@
 
 </head>
 <body>
-<div id="menuContent" style="background-color:#8FBC8F;color:#000000;height:100px;">
+<div id="menuContent" style="background-color:#8FBC8F;color:#000000;height:120px;">
 	<h1 style="margin-left:30px;margin-top:5px;">教学管理系统</h1>
 	<br/>
 	<div style="margin-left:50px;">

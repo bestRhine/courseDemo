@@ -27,32 +27,6 @@ public class CourseController{
 	private CourseService courseService;
 	
 	@RequestMapping("/findCourse")
-	/*  public String findCourse(HttpServletRequest request, HttpServletResponse response) {
-		 
-		String cname=request.getParameter("cname");
-        // 获取分页参数
-       /* int start = 0;
-        int count = 5;
-       
-        try {
-            start = Integer.parseInt(request.getParameter("page.start"));
-            count = Integer.parseInt(request.getParameter("page.count"));
-        } catch (Exception e) {
-        }  /
-        
-
-        Page page = new Page(0,3);
- 		 
-		
-        List<course> course = courseService.listCourseByName(cname);
-        int total = courseService.getTotal();
-        page.setTotal(total);
- 
-        request.setAttribute("course", course);
-        request.setAttribute("page", page);
- 
-        return "findCourse";  */
-
 		public ModelAndView listCourseByName(ModelAndView mav,String cname) {
 		    Map<String,Object> param=new HashMap<String,Object>();
 		    param.put("cname","%"+cname+"%");
@@ -133,7 +107,7 @@ public class CourseController{
 	 
 	        // 获取分页参数
 	        int start = 0;
-	        int count = 5;
+	        int count = 7;
 	 
 	        try {
 	            start = Integer.parseInt(request.getParameter("page.start"));

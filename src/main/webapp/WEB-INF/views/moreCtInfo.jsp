@@ -30,6 +30,56 @@ function contractTransCourse(id,name,amount){
 	}else{}
 }
 
+function searchTeacher(){
+	var teacher = document.getElementById("teacherQuery").value
+	addTeacher(teacher)
+}
+function addTeacher(teacher){
+		$("#teacherList").html("")
+		var message=""
+		if(teacher!=null){
+			message="{'teacher':'"+teacher+"'}"
+		}else{
+			message="{'teacher':''}"
+		}
+		console.log(message)
+		$.ajax({
+			type:'post',
+			url: '/gymms/getTeacherList',
+			contentType:'application/json;charset=utf-8',
+			data:message,
+			success:function(data){
+				for(var i=0;i<data.length;i++){
+					var oldHtml=$("#teacherList").html();
+					var teacherInfo="<p onclick=\"selectTeacher('"+data[i].empName+"')\">"
+					      +"☐&nbsp 姓名："+data[i].empName+"&nbsp Tel:"+data[i].empPhone+"</p><hr />" 
+					$("#teacherList").html(oldHtml+teacherInfo)
+				} 
+				$(".teacherMask").css("display","block")
+			},
+			error:function(data) {alert("操作异常！ 重试")}
+		});
+	}
+	function selectTeacher(empName){
+		var ctid=document.getElementById("getCtid").value	
+		$.ajax({
+            url : "/gymms/changeTeacher",                           <!--get方式请求,url要从项目名开始重新拼接-->
+            type : "get", 
+            dataType: "json", 
+            data : "ctid="+ctid+"&empName="+empName,                <!--等价于URL后面拼接参数-->
+            success:function(result) { 
+                alert(result.message)   
+                location.href="/gymms/findBy?ctid="+ctid            <!--成功后跳转回上一级界面,重新拼接路径-->
+            },
+			error:function(result) {alert(result.message)}
+     	}); 
+	 
+	}
+	
+	function cancelEdit(){
+		$(".teacherMask").css("display","none")
+	}
+
 </script>
 		</head>
 <body>
@@ -51,7 +101,7 @@ function contractTransCourse(id,name,amount){
         <tbody>
         <c:forEach items="${contractList}" var="Contract" varStatus="status">
             <tr>
-
+				<input type="hidden" id="getCtid"  name="getCtid"  value="${Contract.ctid}">
 				<td>${Contract.ctid}</td>
             	<td>${Contract.ctteacher}</td>
 				<td>${Contract.cttype}</td>
@@ -90,15 +140,15 @@ function contractTransCourse(id,name,amount){
                 
  				
                 <td>
-                <a href="javascript:updateContract('${CtMoreInfo.ctid}','${CtMoreInfo.cname}')"  class="button">刷课	</a>				
+                <a href="javascript:updateContract('${CtMoreInfo.ctid}','${CtMoreInfo.cname}')"><button class="btn btn-success" >刷课</button>	</a>				
                 </td> 
                 
                  <c:if test="${ctcoursetype==null}">              
                 <td>
-                <a href="javascript:contractTransCourse('${CtMoreInfo.ctid}','${CtMoreInfo.cname}','${CtMoreInfo.camount}')" class="button">转课</a>
+                <a href="javascript:contractTransCourse('${CtMoreInfo.ctid}','${CtMoreInfo.cname}','${CtMoreInfo.camount}')"><button class="btn btn-success" >转课</button></a>
                 </td>
                 <td>
-                <a href="javascript:contractTransCourse('${CtMoreInfo.ctid}')" class="button">更换教练</a>
+                <button class="btn btn-success" onclick="addTeacher(null)" >更换教练</button>
                 </td>
            		</c:if>
             </tr>
@@ -121,15 +171,45 @@ function contractTransCourse(id,name,amount){
  
         <tbody>
         <c:forEach items="${showMoreMemInfoList}" var="CtMoreInfo" varStatus="status">
-            <tr>           		
-            		<td><font color="red">${CtMoreInfo.mname}</td>
-       			    <td><font color="red">${CtMoreInfo.mphone}</td> 
+            <tr>    
+            		
+       			   <c:if test="${status.last}">
+            		<td>${CtMoreInfo.mname}</td>
+       			    <td>${CtMoreInfo.mphone}</td> 
+            	  </c:if>       
             	  
+            	   <c:if test="${!status.last}">
+            	 	  <c:if test="${ctcoursetype==null}">  
+            	    	  <td><font color="red">${CtMoreInfo.mname}</font></td>
+       			  		  <td><font color="red">${CtMoreInfo.mphone}</font></td> 
+       			 	  </c:if> 
+       			 	  
+       			  	 <c:if test="${ctcoursetype!=null}"> 
+       			  		 <td>${CtMoreInfo.mname}</td>
+       			   		 <td>${CtMoreInfo.mphone}</td> 
+            	 	 </c:if>
+       			   </c:if>
+       			   
             </tr>
         </c:forEach>
  
         </tbody>
     </table>
+</div>
+
+<div class="teacherMask">
+ <div class="addDIV">
+	<div style="background-color:#8FBC8F;height:40px;width:150;color:#000000;font-size:18px;padding-left:7px;">
+	教练信息<font style="float:right;padding-right:10px;" onclick="cancelEdit()">X</font>
+	</div>
+	
+	<input  id="teacherQuery" width="width:20%"/>
+	
+	<button class="btn"   onclick="searchTeacher()">查询</button>
+	<div id="teacherList" style="border:2px solid #CCC;height:200px;overflow-y:scroll;margin:10px;">
+	
+	</div>
+ </div>	
 </div>
 
 </body>

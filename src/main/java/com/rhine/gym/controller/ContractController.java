@@ -1,5 +1,6 @@
 package com.rhine.gym.controller;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -26,9 +27,11 @@ import com.rhine.gym.entity.ContractCourse;
 import com.rhine.gym.entity.ContractMember;
 import com.rhine.gym.entity.Course;
 import com.rhine.gym.entity.CtMoreInfo;
+import com.rhine.gym.entity.Employee;
 import com.rhine.gym.entity.Member;
 import com.rhine.gym.service.ContractService;
 import com.rhine.gym.service.CourseService;
+import com.rhine.gym.service.EmpRoleService;
 import com.rhine.gym.service.MemberService;
 
 @Controller
@@ -41,6 +44,9 @@ public class ContractController{
 	
 	@Resource
 	MemberService memberService;
+	
+	@Resource
+	EmpRoleService empRoleService;
 	
 	@RequestMapping("/home")
 	public String home() {
@@ -101,19 +107,10 @@ public class ContractController{
 		Map<String,Object> map =new HashMap<String,Object>();
 		map.put("ctid", ctid);
 		List<Contract> contractList=contractService.findBy(map);
-		/*int max=0;
-		if(contractList.get(0).getCtcoursetype().equals("私课")&&contractList.get(0).getCttype().equals("转让")) {
-			max=showMoreMemInfoList.get(0).getMid();
-			for(int i=1;i<showMoreMemInfoList.size()-1;i++) {
-				if(showMoreMemInfoList.get(i).getMid()>showMoreMemInfoList.get(i-1).getMid()) {
-					max=showMoreMemInfoList.get(i).getMid();
-				}
-			}
-		}  */
+		
 		model.addAttribute("contractList", contractList);
 		model.addAttribute("showMoreCtInfoList", showMoreCtInfoList);    //区别modelandview用法
 		model.addAttribute("showMoreMemInfoList", showMoreMemInfoList);
-		//model.addAttribute("max",max);
 		model.addAttribute("ctcoursetype",contractList.get(0).getCtcoursetype().equals("私课")?null:"团课");  //从集合中取出合同，再取出类型，因为前面查询条件是ctid,所以唯一。按下标取出contract,访问属性	
 		return "moreCtInfo";
 	
@@ -157,9 +154,9 @@ public class ContractController{
 		    	return mav;                  //失败的话直接返回主页，打印失败信息。不参与转课业务操作
 		    }  */
 		    Map<String,Object> parammid=new HashMap<>();
-		    parammid.put("mphone",mphone);
+		    parammid.put("mname",mname);
 		    
-		    if(!memberService.listByCondition(parammid).get(0).getMname().equals(mname)) {
+		    if(!memberService.listByCondition(parammid).get(0).getMphone().equals(mphone)) {
 		    	mav.addObject("resultMessage", ctid+"号 合同 会员间转让课程失败</br>会员名，电话不匹配！重试！");
 		    	return mav; 
 		    }
@@ -172,6 +169,7 @@ public class ContractController{
 		    map.put("ctoperator",ctoperator);
 		    map.put("ctpay",ctpay);
 		    map.put("cttype","转让");
+		    map.put("mid",memberService.listByCondition(parammid).get(0).getMid());
 		    contractService.contractTransCourse(map); 
 		    map.clear();                         //清空
 		    map.put("ctid", ctid);              //放置合同转让成功后，查找该合同的参数
@@ -180,7 +178,69 @@ public class ContractController{
 			return mav;		
 	}
 	
+	// 更换教练,合同页面添加教练悬浮窗，给出教练列表
+	@RequestMapping("/getTeacherList")
+	public @ResponseBody List<Employee> getTeacherList(@RequestBody String json) {
+		Map<String,Object> param=new HashMap<String,Object>();
+		param.put("rname","教练");
+		List<Employee> teacherList=null;
+		if(!StringUtils.isNullOrEmpty(json)) {
+			String teacher=JSONObject.parseObject(json).getString("teacher");		
+			if(!StringUtils.isNullOrEmpty(teacher)) {
+				param.put("empName", "%"+teacher+"%");
+				teacherList=empRoleService.findEmpnamesByRname(param);
+			}
+			else {
+				 
+				 teacherList=empRoleService.findEmpnamesByRname(param);
+			}  
+		}
+		return teacherList;
+	}
+	
+	//合同添加页面售卡人悬浮窗，给出售卡人列表。通过ajax,post请求
+	@RequestMapping("/getSalerList")
+	public @ResponseBody List<Employee> getSalerList(@RequestBody String json) {
+		Map<String,Object> param=new HashMap<String,Object>();
+		param.put("rname","售卡人");
+		List<Employee> salerList=null;
+		if(!StringUtils.isNullOrEmpty(json)) {
+			String saler=JSONObject.parseObject(json).getString("saler");		
+			if(!StringUtils.isNullOrEmpty(saler)) {
+				param.put("empName", "%"+saler+"%");
+				salerList=empRoleService.findEmpnamesByRname(param);
+			}
+			else {
+				 
+				salerList=empRoleService.findEmpnamesByRname(param);
+			}  
+		}
+		return salerList;
+	}
+		
+	//获取get参数，执行更换教练操作，返回json
+	@RequestMapping("/changeTeacher")
+	public void changeTeacher(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		
+		    JSONObject  jsonObject=new JSONObject();
+		    try {
+		    int ctid=Integer.parseInt(request.getParameter("ctid"));
+		    String empName=(String)request.getParameter("empName");
+		    Map<String,Object> map=new HashMap<>();   //放转让合同参数
+		    map.put("ctid",ctid);
+		    if(contractService.findBy(map).get(0).getCtteacher().equals(empName)) {  //按照ctid查找取出唯一合同教练名，和待更换教练名比较                                                                                                                      
+		    	throw new  Exception("更换教练失败!");                               //校验是否已经更换了教练，若没有则手动抛异常
+		    }
+		    contractService.changeTeacher(ctid, empName);
+		    jsonObject.put("message","更换教练成功!");
+		    }catch(Exception e){
+		    	jsonObject.put("message", e.getMessage());                  //打印异常信息
+	            //jsonObject.put("status", "error");
+		    }
+		    response.setContentType("text/html;charset=utf-8");   //防止中文乱码
+		    response.getWriter().print(jsonObject);  
 
+	}
 	
 	//进入新建合同页面
 	@RequestMapping("/editContract")
@@ -191,8 +251,12 @@ public class ContractController{
 	//新建合同，进行信息编辑
 	@RequestMapping("/addContract")
 	public String addContract(Model model,Contract contract,String [] courseIdArrays,String [] memberIdArrays,String [] camountArrays) {
-		if(courseIdArrays==null||memberIdArrays==null||courseIdArrays.length==0||memberIdArrays.length==0){	    //确保合同信息，会员课程信息已录入 再完成数据库提交，否则关联表为空
+		if(courseIdArrays==null||memberIdArrays==null||camountArrays==null||courseIdArrays.length==0||memberIdArrays.length==0||camountArrays.length==0){	    //确保合同信息，会员课程信息,课时数量已录入 再完成数据库提交，否则关联表为空
 			model.addAttribute("resultMessage", "对不起,系统无法添加课程/会员!</br>请输入完整信息以办理合同!");    //先判断是否为null,因为有可能根本没点进编辑页面。不然会报错
+			return "editContract";
+		}
+		if(contract.getCtcoursetype().equals("私课")&&(courseIdArrays.length>1||memberIdArrays.length>1)) {
+			model.addAttribute("resultMessage", "对不起,多会员/多课程只支持办理【团课】合同!");   
 			return "editContract";
 		}
 		contractService.addContract(contract);                      
@@ -226,13 +290,17 @@ public class ContractController{
 		List<Course> courseList=null;
 		if(!StringUtils.isNullOrEmpty(json)) {
 			String cname=JSONObject.parseObject(json).getString("cname");
+			String ctype=JSONObject.parseObject(json).getString("ctype");
+			
 			if(!StringUtils.isNullOrEmpty(cname)) {
-				param.put("cname", "%"+cname+"%");
+				param.put("cname", "%"+cname+"%");	
 				courseList=courseService.listCourseByName(param);
 			}
 			else {
-				 int total = courseService.getTotal();
-				 courseList=courseService.list(0, total);
+				 //int total = courseService.getTotal();
+				 //courseList=courseService.list(0, total);
+				param.put("ctype",ctype);				//	默认查找全部，但是以确定的合同类型为依据
+				courseList=courseService.listCourseByName(param);
 			}
 		}
     	//List<Course> courseList=courseService.listCourseByName(param);
@@ -285,7 +353,7 @@ public class ContractController{
 		Map<String,Object> mMap=null;
 		for(int i=0;i<arrays.length;i++) {
 			mMap=new HashMap<String,Object>();
-			String mid=arrays[i];
+			String mid=arrays[i];		
 
 			Map<String,Object> param=new HashMap<>();
 			param.put("mid",mid);

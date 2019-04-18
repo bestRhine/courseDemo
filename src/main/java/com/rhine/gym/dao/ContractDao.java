@@ -23,7 +23,7 @@ public interface ContractDao{
 	void  updateContract(@Param("ctid") int ctid,@Param("cname") String cname);
 	
 	void  contractTransCourse(@Param("params") Map map);
-	void  contractChangeTeacher(Contract contract);
+	void  changeTeacher(@Param("ctid") int ctid, @Param("empName") String empName);
 	
 	void  insertMiddleContractCourse(ContractCourse contractCourse);
 

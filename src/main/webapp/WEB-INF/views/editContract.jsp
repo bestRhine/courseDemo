@@ -25,11 +25,12 @@
 	}
 	
 	function addCourse(cname){
+		var type=document.getElementById("indexType").value	
 		var message=""
 			if(mname!=null){
-				message="{'cname':'"+cname+"'}"
+				message="{'cname':'"+cname+"','ctype':'"+type+"'}"
 			}else{
-				message="{'cname':''}"
+				message="{'cname':'','ctype':'"+type+"'}"
 			}
 			$.ajax({
 				type:'post',
@@ -38,18 +39,18 @@
 				data:message,
 				success:function(data){
 					var tableHead="<tr>"+"<td><input type='checkbox' onclick='checkAll(this)'></td>"+
-							"<td>课程名</td><td>类型</td>"+
+							"<td>课程名</td><td>类型</td><td>简介</td>"+
 							"</tr>"
 					$("#courseList").html(tableHead)
 					for(var i=0;i<data.length;i++){
 						var oldHtml=$("#courseList").html()
 						var cInfo="<tr>"+"<td><input type='checkbox' id='carrays'  name='carrays' value='"+data[i].cid+"'></td>"+
-								"<td>"+data[i].cname+"</td><td>"+data[i].ctype+"</td>"+"</tr>"
+								"<td>"+data[i].cname+"</td><td>"+data[i].ctype+"</td><td>"+data[i].cinfo+"</td>"+"</tr>"
 														
 						$("#courseList").html(oldHtml+cInfo)
 					}								
 					$("#courseList").html("<table style='width:400px;text-align:center;' border=1>"+
-							$("#courseList").html()+"</table>") 
+							$("#courseList").html()+"</table>")    
 							
 					$(".courseMask").css("display","block")
 				},
@@ -89,10 +90,11 @@
 				$("#courseInfo").html(tableHead)
 				for(var i=0;i<data.length;i++){
 					var course=data[i].course
-					var oldHtml=$("#courseInfo").html()
+					var oldHtml=$("#courseInfo").html()  
+					<!--取出来的是List数组，且按id查找只有里面一个元素。存放的是hashmap，所以这里先list.get(0)取出map,再get(key)取出值-->
 					var courseInfo="<tr>"+"<td>"+course[0].cname+"</td>"+
 							"<td>"+course[0].ctype+"</td><td>"+
-							"<input type='number' style='width:50px' name='camountArrays'>课时"+"</td>"+
+							"<input type='number'  style='width:50px' name='camountArrays' min='5' max='500'>课时"+"</td>"+
 							"</tr><input type='hidden' name='courseIdArrays' value='"+course[0].cid+"'>"
 					
 					$("#courseInfo").html(oldHtml+courseInfo)
@@ -109,14 +111,14 @@
     }
 		
 		
-	function cancelEdit(){
+	function cancelEdit(){ 
 		$(".courseMask").css("display","none")
 		$(".memberMask").css("display","none")
 	}
 	function cancelWindowMask(){
 		$("#cancelWindowMask").css("display","none")    <!--在css中设置布局的，这里直接#。。获取，否则蒙版mask类似上一个函数-->
 	}
-	
+	 
 	function searchMember(){
 		<!--addMember($("#mname").val())-->
 		var mname = document.getElementById("mnameQuery").value
@@ -148,7 +150,7 @@
 					}
 							
 					$("#memberList").html("<table style='width:400px;text-align:center;' border=1>"+
-							$("#memberList").html()+"</table>")  
+							$("#memberList").html()+"</table>")   
 							 
 					$(".memberMask").css("display","block")
 				},
@@ -180,19 +182,100 @@
 					var oldHtml=$("#memberInfo").html()
 					var memberInfo="<tr>"+"<td>"+member[0].mname+"</td>"+
 					"<td>"+member[0].mgender+"</td><td>"+member[0].mphone+"</td>"+
-					"</tr><input type='hidden' name='memberIdArrays' value='"+member[0].mid+"'>"
+					"</tr><input type='hidden' name='memberIdArrays' value='"+member[0].mid+"'>" 
 					
 					$("#memberInfo").html(oldHtml+memberInfo)	
 				}
 				$("#memberInfo").html("<table style='width:500px;text-align:center;' border=1>"+
-						$("#memberInfo").html()+"</table>")
-				$(".memberMask").css("display","none")
+						$("#memberInfo").html()+"</table>") 
+				$(".memberMask").css("display","none") 
 				$("#memberInfo").css("display","block") 
 			},
 			error:function(data) {alert("操作异常！ 重试")}
 
 		});
     }
+	
+	function searchTeacher(){
+		var teacher = document.getElementById("teacherQuery").value
+		addTeacher(teacher)
+	}
+	function addTeacher(teacher){
+			$("#teacherList").html("")
+			var message=""
+			if(teacher!=null){
+				message="{'teacher':'"+teacher+"'}"
+			}else{
+				message="{'teacher':''}"
+			}
+			
+			$.ajax({
+				type:'post',
+				url: '/gymms/getTeacherList',
+				contentType:'application/json;charset=utf-8',
+				data:message,
+				success:function(data){
+					for(var i=0;i<data.length;i++){
+						var oldHtml=$("#teacherList").html();
+						var teacherInfo="<p onclick=\"selectTeacher('"+data[i].empName+"')\">"
+						      +"☐&nbsp 姓名："+data[i].empName+"&nbsp Tel:"+data[i].empPhone+"</p><hr />" 
+						$("#teacherList").html(oldHtml+teacherInfo)
+					}
+					$(".teacherMask").css("display","block")
+				},
+				error:function(data) {alert("操作异常！ 重试")}
+			});
+		}
+		function selectTeacher(empName){
+			$("#ctteacher").val(empName) 
+			cancelEditTeacher()
+		}
+		function cancelEditTeacher(){
+			$(".teacherMask").css("display","none")
+		}
+
+	
+		function searchSaler(){
+			var saler = document.getElementById("salerQuery").value
+			addSaler(saler)
+		}
+		function addSaler(saler){
+				$("#salerList").html("")
+				var message=""
+				if(saler!=null){
+					message="{'saler':'"+saler+"'}"
+				}else{
+					message="{'saler':''}"
+				} 
+				
+				$.ajax({
+					type:'post',
+					url: '/gymms/getSalerList',
+					contentType:'application/json;charset=utf-8',
+					data:message,
+					success:function(data){
+						for(var i=0;i<data.length;i++){
+							var oldHtml=$("#salerList").html();
+							var salerInfo="<p onclick=\"selectSaler('"+data[i].empName+"')\">"
+							      +"☐&nbsp 姓名："+data[i].empName+"&nbsp Tel:"+data[i].empPhone+"</p><hr/>" 
+							$("#salerList").html(oldHtml+salerInfo)
+						}
+						$(".salerMask").css("display","block")
+					},
+					error:function(data) {alert("操作异常！ 重试")}
+				});
+			}
+			function selectSaler(empName){
+				$("#ctsaler").val(empName) 
+				cancelEditSaler()
+			}
+			function cancelEditSaler(){
+				$(".salerMask").css("display","none")
+			}
+
+		
+		
+	
 	function checkAddContract(){ 
         if($("#ctoperator").val()==null||$("#ctoperator").val()==""){
             alert("操作员工不能为空！");
@@ -214,7 +297,7 @@
             alert("订单/实付金额不能为空！");
             return false;
         }
-        
+       
         return true;
    }
 	 
@@ -227,7 +310,7 @@
 
 
 <form method="post" action="${pageContext.request.contextPath }/addContract" role="form"  onsubmit=" return checkAddContract()">
-                                  <!-- onsubmit做校验，如果输入参数不合法，组织表单提交。这里必须是return+function() -->
+                                  <!--  onsubmit做校验，如果输入参数不合法，组织表单提交。这里必须是return+function() -->
 <div class="addCtDIV">
  
     <div class="panel panel-success">
@@ -249,14 +332,14 @@
                   	<option value="团课">团课</option>
                   </select>  </td>  &nbsp &nbsp(说明：只有团课类型合同才能添加多个会员，多个课程!)
             
-                   <input type="hidden" name="ctcoursetype" id="ctcoursetype" value="私课"/>
+                   <input type="hidden" 	name="ctcoursetype" id="ctcoursetype" value="私课"/>
                    <input type="hidden" name="cttype" id="cttype" value="新办"/>        
               </tr>
-              <tr>
+              <tr> 
                  <td>上课教练：</td>
-                  <td><input type="text" name="ctteacher" id="ctteacher" placeholder="输入教练名字"></td>
+                  <td><input type="text" name="ctteacher" id="ctteacher" placeholder="输入教练名字" onfocus="addTeacher(null)"></td>
                   <td>&nbsp &nbsp &nbsp售课人：</td>
-                  <td><input type="text" name="ctsaler" id="ctsaler" placeholder="输入售课人名"></td>
+                  <td><input type="text" name="ctsaler" id="ctsaler" placeholder="输入售课人名" onfocus="addSaler(null)"></td>
               </tr>
 			  <tr>
                  <td>起止日期：</td>
@@ -274,6 +357,37 @@
      </div>	
 </div>	
 </div>	
+
+<div class="teacherMask">
+ <div class="addDIV">
+	<div style="background-color:#8FBC8F;height:40px;width:150;color:#000000;font-size:18px;padding-left:7px;">
+	教练列表<font style="float:right;padding-right:10px;" onclick="cancelEditTeacher()">X</font>
+	</div>
+	
+	<input  id="teacherQuery" width="width:20%"/>
+	
+	<button class="btn"   onclick="searchTeacher()">查询</button>
+	<div id="teacherList" style="border:2px solid #CCC;height:200px;overflow-y:scroll;margin:10px;">
+	
+	</div>
+ </div>	
+</div>
+
+<div class="salerMask">
+ <div class="addDIV">
+	<div style="background-color:#8FBC8F;height:40px;width:150;color:#000000;font-size:18px;padding-left:7px;">
+	售卡人列表<font style="float:right;padding-right:10px;" onclick="cancelEditSaler()">X</font>
+	</div>
+	
+	<input  id="salerQuery" width="width:20%"/>
+	
+	<button class="btn"   onclick="searchSaler()">查询</button>
+	<div id="salerList" style="border:2px solid #CCC;height:200px;overflow-y:scroll;margin:10px;">
+	
+	</div>
+ </div>	
+</div>
+
 	
 <div class="Info">
  

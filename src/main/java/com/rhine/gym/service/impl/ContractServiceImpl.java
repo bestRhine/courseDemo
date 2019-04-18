@@ -66,8 +66,9 @@ public class ContractServiceImpl implements ContractService{
 	}
 
 	@Override
-	public void contractChangeTeacher(Contract contract) {
+	public void changeTeacher(int ctid, String empName) {
 		// TODO Auto-generated method stub
-		contractDao.contractChangeTeacher(contract);
+		contractDao.changeTeacher(ctid, empName);
 	}
+
 }

@@ -26,8 +26,8 @@
 		</if>
 		<if test="params.mname!=null">and ct.tctid in(select ctid from ct_mem where ct_mem.mid in(select mid from member where mname like #{params.mname}))	
 		</if>
-		<if test="params.ctbegin!=null">and Date(ct.tctbegin)<![CDATA[>=]]>#{params.ctbegin}</if>
-		<if test="params.ctend!=null">and Date(ct.tctend)<![CDATA[<=]]>#{params.ctend}</if>
+		<if test="params.ctbegin!=null">and Date(ct.tctbegin)<![CDATA[<=]]>#{params.ctbegin}</if>
+		<if test="params.ctend!=null">and Date(ct.tctend)<![CDATA[>=]]>#{params.ctend}</if>
 		<if test="params.ctcoursetype!=null">and ct.tctcoursetype=#{params.ctcoursetype}</if>
 	</sql>
 
@@ -129,5 +129,13 @@
 		tcttype=#{params.cttype}  where ct.tctid=#{params.ctid}		
 						
 	</insert>
+	
+	<update id="changeTeacher">
+		set  foreign_key_checks=0;
+		update ct 
+		set tctteacher=#{empName} 
+		where tctid=#{ctid}
+	</update>
+	
 	
 </mapper>
