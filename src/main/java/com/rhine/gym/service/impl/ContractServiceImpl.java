@@ -66,9 +66,21 @@ public class ContractServiceImpl implements ContractService{
 	}
 
 	@Override
-	public void changeTeacher(int ctid, String empName) {
+	public void changeTeacher(int ctid, String empName,String type) {
 		// TODO Auto-generated method stub
-		contractDao.changeTeacher(ctid, empName);
+		contractDao.changeTeacher(ctid, empName,type);
+	}
+
+	@Override
+	public void insertCtRecord(int ctid, String ctoperator, String ctteacher, String cname, int amountuse) {
+		// TODO Auto-generated method stub
+		contractDao.insertCtRecord(ctid,ctoperator,ctteacher,cname,amountuse);
+	}
+
+	@Override
+	public int getRecordByConditon(Map<String, Object> map) {
+		// TODO Auto-generated method stub
+		return contractDao.getRecordByConditon(map);
 	}
 
 }

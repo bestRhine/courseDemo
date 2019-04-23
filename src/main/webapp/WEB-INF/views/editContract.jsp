@@ -27,7 +27,7 @@
 	function addCourse(cname){
 		var type=document.getElementById("indexType").value	
 		var message=""
-			if(mname!=null){
+			if(cname!=null){
 				message="{'cname':'"+cname+"','ctype':'"+type+"'}"
 			}else{
 				message="{'cname':'','ctype':'"+type+"'}"
@@ -39,19 +39,19 @@
 				data:message,
 				success:function(data){
 					var tableHead="<tr>"+"<td><input type='checkbox' onclick='checkAll(this)'></td>"+
-							"<td>课程名</td><td>类型</td><td>简介</td>"+
+							"<td>课程名</td><td>类型</td><td>简介</td><td>教练</td>"+
 							"</tr>"
 					$("#courseList").html(tableHead)
 					for(var i=0;i<data.length;i++){
 						var oldHtml=$("#courseList").html()
 						var cInfo="<tr>"+"<td><input type='checkbox' id='carrays'  name='carrays' value='"+data[i].cid+"'></td>"+
-								"<td>"+data[i].cname+"</td><td>"+data[i].ctype+"</td><td>"+data[i].cinfo+"</td>"+"</tr>"
+								"<td>"+data[i].cname+"</td><td>"+data[i].ctype+"</td><td>"+data[i].cinfo+"</td><td>"+data[i].cteacher+"</td>"+"</tr>"
 														
 						$("#courseList").html(oldHtml+cInfo)
 					}								
 					$("#courseList").html("<table style='width:400px;text-align:center;' border=1>"+
 							$("#courseList").html()+"</table>")    
-							
+							 
 					$(".courseMask").css("display","block")
 				},
 				error:function(data) {alert("操作异常！ 重试")}
@@ -150,7 +150,7 @@
 					}
 							
 					$("#memberList").html("<table style='width:400px;text-align:center;' border=1>"+
-							$("#memberList").html()+"</table>")   
+							$("#memberList").html()+"</table>")    
 							 
 					$(".memberMask").css("display","block")
 				},
@@ -308,6 +308,7 @@
 <body>
 <%@ include file="menu.jsp" %><br/>
 
+<div class="right">
 
 <form method="post" action="${pageContext.request.contextPath }/addContract" role="form"  onsubmit=" return checkAddContract()">
                                   <!--  onsubmit做校验，如果输入参数不合法，组织表单提交。这里必须是return+function() -->
@@ -318,11 +319,11 @@
             <h3 class="panel-title">办理合同</h3>
         </div>
        <div class="panel-body">
-		<table class="addCtTable">
+		<table class="addTable">
               <tr>
-                 <td>&nbsp &nbsp &nbsp &nbsp租户：</td>
+                 <td>&nbsp; &nbsp; &nbsp; &nbsp;租户：</td>
                   <td><input type="text" name="tid" id="tid" placeholder="请在这里输入租户id"></td>
-                  <td>&nbsp操作员工：</td>
+                  <td>&nbsp;操作员工：</td>
                   <td><input type="text" name="ctoperator" id="ctoperator" placeholder="输入操作人姓名"></td>
               </tr>
               <tr>
@@ -330,7 +331,7 @@
                   <td><select id="indexType" onchange="changeType()">
                   	<option value="私课">私课</option>
                   	<option value="团课">团课</option>
-                  </select>  </td>  &nbsp &nbsp(说明：只有团课类型合同才能添加多个会员，多个课程!)
+                  </select>  </td>  &nbsp; &nbsp;(说明：只有团课类型合同才能添加多个会员，多个课程!)
             
                    <input type="hidden" 	name="ctcoursetype" id="ctcoursetype" value="私课"/>
                    <input type="hidden" name="cttype" id="cttype" value="新办"/>        
@@ -338,19 +339,19 @@
               <tr> 
                  <td>上课教练：</td>
                   <td><input type="text" name="ctteacher" id="ctteacher" placeholder="输入教练名字" onfocus="addTeacher(null)"></td>
-                  <td>&nbsp &nbsp &nbsp售课人：</td>
+                  <td>&nbsp; &nbsp; &nbsp;售课人：</td>
                   <td><input type="text" name="ctsaler" id="ctsaler" placeholder="输入售课人名" onfocus="addSaler(null)"></td>
               </tr>
 			  <tr>
                  <td>起止日期：</td>
                   <td><input type="text" name="ctbegin" id="ctbegin" placeholder="年/月/日"></td>
-                  <td>&nbsp  — &nbsp到&nbsp —&nbsp</td>
+                  <td>&nbsp;  — &nbsp;到&nbsp; —&nbsp;</td>
                   <td><input type="text" name="ctend" id="ctend" placeholder="年/月/日"></td>
               </tr>
               <tr>
                  <td>订单金额：</td>
                   <td><input type="text" name="ctorder" id="ctorder" placeholder="输入金额"></td>
-                  <td>&nbsp 实付金额：</td>
+                  <td>&nbsp; 实付金额：</td>
                   <td><input type="text" name="ctpay" id="ctpay" placeholder="输入金额"></td>
               </tr>
               </table>	
@@ -408,7 +409,10 @@
 					 </div>
         
     </div>
-</div> <br/><br/>
+</div> <br/>
+
+
+
  
              
 <div class="Info">
@@ -427,7 +431,7 @@
                </div>
 	
 </div>
-</div>			
+</div>	<br/>	
 
 <div class="addCtDIV">
 <div class="panel-body">
@@ -445,19 +449,6 @@
 
 </form>
 
-<div class="editDIV">
-		<c:if test="${resultMessage!=null}">
-		<div id="cancelWindowMask" style="display:block">
-		<div style="background-color:#B4EEB4;height:70px;width:400;color:#FF3030;font-size:18px;padding-left:20px;">
-		<font style="float:right;padding-right:20px;" onclick="cancelWindowMask()">X</font>
-		<b>${resultMessage}</b>
-
-		</div>
-		</div>
-		</c:if>
-</div>
-</div>
-
 <div class="courseMask">
  <div class="addCtDIV"> 
 	<div style="background-color:#8FBC8F;height:40px;width:150;color:#000000;font-size:18px;padding-left:7px;">
@@ -471,7 +462,7 @@
 	</div>
 	 <button class="btn" onclick="selectCourse()">确定</button>
  </div>	
-</div>
+</div><br/>
 
 <div class="memberMask">
  <div class="addCtDIV">
@@ -488,6 +479,24 @@
 	   <button class="btn" onclick="selectMember()">确定</button>
  </div>	
 </div>
+
+<div class="editDIV">
+		<c:if test="${resultMessage!=null}">
+		<div id="cancelWindowMask" style="display:block">
+		<div style="background-color:#B4EEB4;height:70px;width:400;color:#FF3030;font-size:18px;padding-left:20px;">
+		<font style="float:right;padding-right:20px;" onclick="cancelWindowMask()">X</font>
+		<b>${resultMessage}</b>
+
+		</div>
+		</div>
+		</c:if>
+</div>
+
+</div>
+
+
+
+
 
 </body>
 </html>

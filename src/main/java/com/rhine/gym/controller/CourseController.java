@@ -54,12 +54,12 @@ public class CourseController{
         String cname = request.getParameter("cname");
         String cinfo = request.getParameter("cinfo");
         String ctype = request.getParameter("ctype");
-        
+        String cteacher=request.getParameter("cteacher");
         cs.setTid(tid);       
         cs.setCname(cname);
         cs.setCinfo(cinfo);
         cs.setCtype(ctype);
- 
+        cs.setCteacher(cteacher);
         courseService.addCourse(cs);
  
         return "redirect:listCourse";
@@ -89,13 +89,14 @@ public class CourseController{
 	        String cname = request.getParameter("cname");
 	        String cinfo = request.getParameter("cinfo");
 	        String ctype = request.getParameter("ctype");
+	        String cteacher=request.getParameter("cteacher");
 	        
 	        cs.setCid(cid);
 	        cs.setTid(tid);       
 	        cs.setCname(cname);
 	        cs.setCinfo(cinfo);
 	        cs.setCtype(ctype);
-	        
+	        cs.setCteacher(cteacher);
 	        courseService.updateCourse(cs);
 	        
 	        return "redirect:listCourse";

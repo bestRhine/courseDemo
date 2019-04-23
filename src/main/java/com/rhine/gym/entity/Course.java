@@ -5,6 +5,14 @@ public class Course{
 	 private String   cname;          
 	 private String   cinfo;          
 	 private String   ctype;
+	 private String   cteacher;
+
+	public String getCteacher() {
+		return cteacher;
+	}
+	public void setCteacher(String cteacher) {
+		this.cteacher = cteacher;
+	}
 	public int getCid() {
 		return cid;
 	}

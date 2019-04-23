@@ -47,6 +47,7 @@ function checkTransContract(){
 <body>
  
  <%@ include file="menu.jsp" %><br/>
+<div class="right">
   
 <div class="editDIV">
  
@@ -96,6 +97,6 @@ function checkTransContract(){
     </div>
  
 </div>
- 
+</div>
 </body>
 </html>

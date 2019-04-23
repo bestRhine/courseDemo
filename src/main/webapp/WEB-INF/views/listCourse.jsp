@@ -26,6 +26,44 @@ function deleteCourse(cid,cname){
 	}else{}
 }
 
+function searchTeacher(){
+	var teacher = document.getElementById("teacherQuery").value
+	addTeacher(teacher)
+}
+function addTeacher(teacher){
+		$("#teacherList").html("")
+		var message=""
+		if(teacher!=null){
+			message="{'teacher':'"+teacher+"'}"
+		}else{
+			message="{'teacher':''}"
+		}
+		
+		$.ajax({
+			type:'post',
+			url: '/gymms/getTeacherList',
+			contentType:'application/json;charset=utf-8',
+			data:message,
+			success:function(data){
+				for(var i=0;i<data.length;i++){
+					var oldHtml=$("#teacherList").html();
+					var teacherInfo="<p onclick=\"selectTeacher('"+data[i].empName+"')\">"
+					      +"☐&nbsp 姓名："+data[i].empName+"&nbsp Tel:"+data[i].empPhone+"</p><hr />" 
+					$("#teacherList").html(oldHtml+teacherInfo)
+				}
+				$(".teacherMask").css("display","block")
+			},
+			error:function(data) {alert("操作异常！ 重试")}
+		});
+	}
+	function selectTeacher(empName){
+		$("#cteacher").val(empName) 
+		cancelEditTeacher()
+	}
+	function cancelEditTeacher(){
+		$(".teacherMask").css("display","none")
+	}
+
 <%--function editCourse(cid){
 	  var url="${pageContext.request.contextPath}/editCourse?cid="+cid
 
@@ -38,6 +76,8 @@ function deleteCourse(cid,cname){
 </head>
 <body>
 <%@ include file="menu.jsp" %><br/>
+<div class="right">
+
 <div class="findDIV">
  
     <div class="panel panel-success">
@@ -77,7 +117,7 @@ function deleteCourse(cid,cname){
             <th>课程名</th>
             <th>简介</th>
             <th>类型</th>
- 
+ 			<th>教练</th>
             <th>编辑</th>
             <th>删除</th>
         </tr>
@@ -91,6 +131,7 @@ function deleteCourse(cid,cname){
                 <td>${Course.cname}</td>
                 <td>${Course.cinfo}</td>
                 <td>${Course.ctype}</td>
+                <td>${Course.cteacher}</td>
 
  
                 <td><a href="${pageContext.request.contextPath}/editCourse?cid=${Course.cid}&cname=${Course.cname}">修改</a></td>
@@ -171,7 +212,12 @@ function deleteCourse(cid,cname){
                         <td>类型：</td>
                         <td><input type="text" name="ctype" id="ctype" placeholder="1万能课/2私课/3团课"> </td>
                     </tr>
-
+					
+					<tr>
+                        <td>教练：</td>
+                        <td><input type="text" name="cteacher" id="cteacher" placeholder="请在这里输入教练名"  onfocus="addTeacher(null)"> </td>
+                    </tr>
+					
                     <tr class="submitTR">
                         <td colspan="2" align="center">
                             <button type="submit" class="btn btn-success">提 交</button>
@@ -186,6 +232,23 @@ function deleteCourse(cid,cname){
     </div>
  
 </div>
+
+</div>	
+
+<div class="teacherMask">
+ <div class="addDIV">
+	<div style="background-color:#8FBC8F;height:40px;width:150;color:#000000;font-size:18px;padding-left:7px;">
+	教练列表<font style="float:right;padding-right:10px;" onclick="cancelEditTeacher()">X</font>
+	</div>
 	
+	<input  id="teacherQuery" width="width:20%"/>
+	
+	<button class="btn"   onclick="searchTeacher()">查询</button>
+	<div id="teacherList" style="border:2px solid #CCC;height:200px;overflow-y:scroll;margin:10px;">
+	
+	</div>
+ </div>	
+</div>
+
 </body>
 </html>

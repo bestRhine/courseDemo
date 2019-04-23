@@ -12,6 +12,15 @@
     <link href="css/bootstrap/3.3.6/bootstrap.min.css" rel="stylesheet">
     <script src="js/bootstrap/3.3.6/bootstrap.min.js"></script>  
     <link href="css/style.css" rel="stylesheet">
+    
+<style type="text/css">
+.pics{
+	position : fixed;
+	top : 124px;
+	left: 268px;
+	
+}
+</style>
 
 <meta charset="UTF-8">
 <title>主页</title>
@@ -19,5 +28,10 @@
 </head>
 <body>
 	<%@ include file="menu.jsp" %>
+
+	<div class="pics">
+	<img alt="picture" src="images/img1.jpg" width="100%" height="67%">
+	</div>
+
 </body>
 </html>

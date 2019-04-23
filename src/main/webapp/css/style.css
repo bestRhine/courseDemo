@@ -1,7 +1,13 @@
 body {
-    padding-top: 60px;
+    padding-top: 0px;
 }
- 
+
+div.right{
+	position : absolute;
+	top:140px;
+	left:400px;
+}
+
 div.findDIV {
     width: 600px;
     margin: 0 auto;
@@ -13,12 +19,12 @@ div.listDIV {
 }
 
 div.findcontractDIV {
-    width:620px;
+    width:650px;
     margin: 0 auto;
 }
 
 div.listcontractDIV {
-    width: 900px;
+    width: 850px;
     margin: 0 auto;
 }
 
@@ -35,6 +41,7 @@ nav.pageDIV {
 div.addDIV {
     width: 300px;
     margin: 0 auto;
+    
 }
 
 div.addCtDIV {

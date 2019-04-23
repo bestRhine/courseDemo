@@ -57,7 +57,7 @@ function addTeacher(teacher){
 				} 
 				$(".teacherMask").css("display","block")
 			},
-			error:function(data) {alert("操作异常！ 重试")}
+			error:function(data) {alert("操作异常！ 重试")} 
 		});
 	}
 	function selectTeacher(empName){
@@ -85,6 +85,7 @@ function addTeacher(teacher){
 <body>
  
  <%@ include file="menu.jsp" %><br/>
+ <div class="right">
  
  <div class="listDIV">
     <table class="table table-striped table-bordered table-hover table-condensed">
@@ -211,6 +212,6 @@ function addTeacher(teacher){
 	</div>
  </div>	
 </div>
-
+</div>
 </body>
 </html>

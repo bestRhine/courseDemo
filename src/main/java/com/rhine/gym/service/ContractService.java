@@ -20,9 +20,11 @@ public interface ContractService{
 	void  updateContract(int ctid,String cname);
 	
 	void  contractTransCourse(Map map);
-	void  changeTeacher(int ctid,String empName);
+	void  changeTeacher(int ctid,String empName, String type);
 	
 	void insertMiddleContractCourse(ContractCourse contractCourse);
 	void insertMiddleContractMember(ContractMember contractMember);
 	int maxCurrentId();
+	void insertCtRecord(int ctid, String ctoperator, String ctteacher, String cname, int amountuse);
+	int getRecordByConditon(Map<String, Object> map);
 }

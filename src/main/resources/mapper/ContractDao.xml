@@ -60,6 +60,18 @@
 		
 	</update>
 	
+	<insert id="insertCtRecord">
+		insert into ctrecord values(default,#{ctid},#{ctoperator},#{ctteacher},#{cname},default,#{amountuse})
+	</insert>
+	<select id="getRecordByConditon" parameterType="java.util.HashMap" resultType="java.lang.Integer">
+		select count(amountuse) from ctrecord where 1=1
+		<if test="params.ctteacher!=null">and ctteacher=#{params.ctteacher}</if>
+		<if test="params.cname!=null">and cname=#{params.cname}</if>
+		<if test="params.ctbegin!=null">and Date(ctrecord.lessontime)<![CDATA[>=]]>#{params.ctbegin}</if>
+		<if test="params.ctend!=null">and Date(ctrecord.lessontime)<![CDATA[<=]]>#{params.ctend}</if>
+	</select>
+	
+	
 	<resultMap type="com.rhine.gym.entity.CtMoreInfo" id="CtMoreInfoMap">
 		<id column="tctid"  property="ctid"/>
 		<result column="camount"   property="camount"/>
@@ -133,7 +145,7 @@
 	<update id="changeTeacher">
 		set  foreign_key_checks=0;
 		update ct 
-		set tctteacher=#{empName} 
+		set tctteacher=#{empName},tcttype=#{type}
 		where tctid=#{ctid}
 	</update>
 	

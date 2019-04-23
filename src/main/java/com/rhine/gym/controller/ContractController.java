@@ -53,6 +53,11 @@ public class ContractController{
 		return "home";
 	}
 	
+	@RequestMapping("/listCtTable")
+	public String listCtTable() {
+		return "listCtTable";
+	}
+	
 	 //按照不同条件组合查询合同
 	@RequestMapping("/findBy")
 	public String findBy(Model model, Contract contract,String mname,String cname,String ctbegin,String ctend) {
@@ -80,7 +85,25 @@ public class ContractController{
 		if(contractList.size()<1) {
 			model.addAttribute("resultMessage","搜索结果为空！请更换条件重试！！");
 		}else {
-		model.addAttribute("contractList", contractList);
+			model.addAttribute("contractList", contractList);
+		    Map<String,Object> map1 =new HashMap<String,Object>();
+		if(map.get("ctteacher")!=null&&(map.containsKey("ctbegin")||map.containsKey("ctend"))) {		
+			map1.put("ctteacher",contract.getCtteacher());
+			map.put("ctbegin",ctbegin);
+			map.put("ctend",ctend);
+			model.addAttribute("resultMessage","教练【"+contract.getCtteacher()+ "】在该时间段上课总计【"+contractService.getRecordByConditon(map1)+"】个课时");
+			return "listCtTable";
+		}
+		else if(map.containsKey("cname")&&(map.containsKey("ctbegin")||map.containsKey("ctend"))) {
+			map1.put("cname",cname);
+			map.put("ctbegin",ctbegin);
+			map.put("ctend",ctend);
+			model.addAttribute("resultMessage","【"+cname+"】课程在该时间段上课总计【"+contractService.getRecordByConditon(map1)+"】个课时");
+			return "listCtTable";
+		}else {
+			
+			model.addAttribute("resultMessage","共搜索到"+contractList.size()+"条记录");
+		}
 		}
 		return "findContract";
 	}	
@@ -119,11 +142,13 @@ public class ContractController{
 	// 对某一已上课程进行刷课
 	@RequestMapping("/updateContract")
 	public  ModelAndView  updateContract(int ctid,String cname){
-		contractService.updateContract(ctid,cname);
+		contractService.updateContract(ctid,cname);		
 		ModelAndView mav=new ModelAndView("moreCtInfo");
 		Map<String,Object> map =new HashMap<String,Object>();
 		map.put("ctid", ctid);
 		List<Contract> contractList=contractService.findBy(map);
+		int amountuse=1;
+		contractService.insertCtRecord(ctid,contractList.get(0).getCtoperator(),contractList.get(0).getCtteacher(),cname,amountuse);
 		List<CtMoreInfo> showMoreCtInfoList=contractService.showMoreCtInfo(ctid);  //对更新后数据重新查询
 		List<CtMoreInfo> showMoreMemInfoList=contractService.showMoreMemInfo(ctid); //应考虑ajax,局部刷新？
 		mav.addObject("contractList", contractList);
@@ -182,7 +207,7 @@ public class ContractController{
 	@RequestMapping("/getTeacherList")
 	public @ResponseBody List<Employee> getTeacherList(@RequestBody String json) {
 		Map<String,Object> param=new HashMap<String,Object>();
-		param.put("rname","教练");
+		param.put("rname","教练");		
 		List<Employee> teacherList=null;
 		if(!StringUtils.isNullOrEmpty(json)) {
 			String teacher=JSONObject.parseObject(json).getString("teacher");		
@@ -190,11 +215,10 @@ public class ContractController{
 				param.put("empName", "%"+teacher+"%");
 				teacherList=empRoleService.findEmpnamesByRname(param);
 			}
-			else {
-				 
+			else {				 
 				 teacherList=empRoleService.findEmpnamesByRname(param);
 			}  
-		}
+		}              //合同类型为更换教练
 		return teacherList;
 	}
 	
@@ -224,6 +248,7 @@ public class ContractController{
 		
 		    JSONObject  jsonObject=new JSONObject();
 		    try {
+		    String type="更换教练";
 		    int ctid=Integer.parseInt(request.getParameter("ctid"));
 		    String empName=(String)request.getParameter("empName");
 		    Map<String,Object> map=new HashMap<>();   //放转让合同参数
@@ -231,7 +256,7 @@ public class ContractController{
 		    if(contractService.findBy(map).get(0).getCtteacher().equals(empName)) {  //按照ctid查找取出唯一合同教练名，和待更换教练名比较                                                                                                                      
 		    	throw new  Exception("更换教练失败!");                               //校验是否已经更换了教练，若没有则手动抛异常
 		    }
-		    contractService.changeTeacher(ctid, empName);
+		    contractService.changeTeacher(ctid, empName,type);
 		    jsonObject.put("message","更换教练成功!");
 		    }catch(Exception e){
 		    	jsonObject.put("message", e.getMessage());                  //打印异常信息

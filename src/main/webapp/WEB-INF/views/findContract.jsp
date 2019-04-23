@@ -31,6 +31,8 @@ function getType(){
 </head>
 <body>
 <%@ include file="menu.jsp" %><br/>
+<div class="right">
+
 <div class="findcontractDIV">
  
     <div class="panel panel-success">
@@ -144,6 +146,8 @@ function getType(){
 <div>
 	
 	
+
+</div>
 
 </div>
 

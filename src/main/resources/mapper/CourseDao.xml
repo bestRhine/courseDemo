@@ -29,13 +29,13 @@
 	</delete>
 	
 	    <update id="updateCourse" parameterType="Course">
-         UPDATE course SET tid = #{tid}, cinfo=#{cinfo},ctype=#{ctype}
+         UPDATE course SET tid = #{tid}, cinfo=#{cinfo},ctype=#{ctype},cteacher=#{cteacher}
          WHERE 
          cid = #{cid} and cname = #{cname}
     </update>
     
 	<insert id="addCourse" parameterType="Course">
-        INSERT INTO  course(tid,cname,cinfo,ctype) VALUES(#{tid}, #{cname}, #{cinfo}, #{ctype})
+        INSERT INTO  course(tid,cname,cinfo,ctype,cteacher) VALUES(#{tid}, #{cname}, #{cinfo}, #{ctype},#{cteacher})
     </insert>		 	
 	 	
 	  <!-- 查询一条数据 -->
@@ -48,7 +48,7 @@
     </select>
     
 	 <select id="list" resultMap="Course">
-        SELECT * FROM course  ORDER BY ctype  desc  limit #{param1}, #{param2}
+        SELECT * FROM course  ORDER BY cid  desc  limit #{param1}, #{param2}
 	 </select>
 	 
 	  <resultMap id="Course" type="Course">
@@ -57,6 +57,7 @@
         <result column="cname" property="cname"/>
         <result column="cinfo" property="cinfo"/>
         <result column="ctype" property="ctype"/>
+        <result column="cteacher" property="cteacher"/>
     </resultMap>
 	 
 </mapper>
